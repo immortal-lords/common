@@ -4,6 +4,8 @@ import '../spec/spec.dart';
 
 import 'package:collection/collection.dart';
 
+export 'auth.dart';
+
 int numRows = 100;
 int numCols = 100;
 
@@ -293,7 +295,7 @@ class Warrior extends PlayableUnit {
       @required this.lastMoved,
       @required this.attacking});
 
-  UnitSpec get spec => UnitSpec.byType(type);
+  WarriorSpec get spec => WarriorSpec.byType(type);
 
   @override
   int getArmor() {

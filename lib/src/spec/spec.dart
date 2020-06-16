@@ -192,7 +192,7 @@ class BuildingSpec implements MapUnitSpec {
       constructionCost: null);
 }
 
-class UnitSpec implements MapUnitSpec {
+class WarriorSpec implements MapUnitSpec {
   final int type;
 
   final String name;
@@ -218,7 +218,7 @@ class UnitSpec implements MapUnitSpec {
   @override
   final kind = Kind.warrior;
 
-  const UnitSpec(
+  const WarriorSpec(
       {@required this.type,
       @required this.name,
       @required this.description,
@@ -233,7 +233,7 @@ class UnitSpec implements MapUnitSpec {
 
   static const maxLevels = 10;
 
-  static UnitSpec byType(int index) {
+  static WarriorSpec byType(int index) {
     switch (index) {
       case 0:
       // TODO
@@ -242,7 +242,7 @@ class UnitSpec implements MapUnitSpec {
     }
   }
 
-  static const militia = UnitSpec(
+  static const militia = WarriorSpec(
       type: 0,
       name: 'Militia',
       description: '',
@@ -303,7 +303,7 @@ class UnitSpec implements MapUnitSpec {
           level9: ConstResource(wood: 10),
           level10: ConstResource(wood: 10)));
 
-  static const archer = UnitSpec(
+  static const archer = WarriorSpec(
       type: 1,
       name: 'Archer',
       description: '',
@@ -364,7 +364,7 @@ class UnitSpec implements MapUnitSpec {
           level9: ConstResource(wood: 10),
           level10: ConstResource(wood: 10)));
 
-  static const paladin = UnitSpec(
+  static const paladin = WarriorSpec(
       type: 2,
       name: 'Paladin',
       description: '',
@@ -425,7 +425,7 @@ class UnitSpec implements MapUnitSpec {
           level9: ConstResource(wood: 10),
           level10: ConstResource(wood: 10)));
 
-  static const halbadier = UnitSpec(
+  static const halbadier = WarriorSpec(
       type: 4,
       name: 'Halbadier',
       description: '',
@@ -486,7 +486,7 @@ class UnitSpec implements MapUnitSpec {
           level9: ConstResource(wood: 10),
           level10: ConstResource(wood: 10)));
 
-  static const mage = UnitSpec(
+  static const mage = WarriorSpec(
       type: 4,
       name: 'Halbadier',
       description: '',
@@ -547,7 +547,7 @@ class UnitSpec implements MapUnitSpec {
           level9: ConstResource(wood: 10),
           level10: ConstResource(wood: 10)));
 
-  static const warlock = UnitSpec(
+  static const warlock = WarriorSpec(
       type: 4,
       name: 'Halbadier',
       description: '',
@@ -608,7 +608,7 @@ class UnitSpec implements MapUnitSpec {
           level9: ConstResource(wood: 10),
           level10: ConstResource(wood: 10)));
 
-  static const titan = UnitSpec(
+  static const titan = WarriorSpec(
       type: 4,
       name: 'Halbadier',
       description: '',
