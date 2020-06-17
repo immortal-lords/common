@@ -41,23 +41,31 @@ class SignupRequest implements Validatable {
   }
 }
 
+class SignupResponse {
+  final String email;
+
+  SignupResponse({this.email});
+
+  static SignupResponse fromMap(Map map) => SignupResponse(email: map['email']);
+
+  Map<String, dynamic> toJson() => {'email': email};
+}
+
 class LoginRequest implements Validatable {
-  final String name;
+  final String email;
 
   final String password;
 
-  LoginRequest({this.name, this.password});
+  LoginRequest({this.email, this.password});
+
+  static LoginRequest fromMap(Map map) =>
+      LoginRequest(email: map['email'], password: map['password']);
 
   @override
   ObjectErrors validate() {
     final ret = ObjectErrors();
-    ret['name'] = validateValue(name, [
-      isNotNull(),
-      isNotEmpty(),
-      hasMinLength(3),
-      hasMaxLength(10),
-      matchesRegExp(RegExp(r'^[a-zA-Z0-9._-]*$'))
-    ]);
+    ret['email'] =
+        validateValue(email, [isNotNull(), isNotEmpty(), isEmailAddress()]);
     ret['password'] = validateValue(password, [
       isNotNull(),
       isNotEmpty(),
@@ -67,4 +75,14 @@ class LoginRequest implements Validatable {
     ]);
     return ret;
   }
+}
+
+class LoginResponse {
+  final String token;
+
+  LoginResponse({this.token});
+
+  Map<String, dynamic> toJson() => {'token': token};
+
+  static LoginResponse fromMap(Map map) => LoginResponse(token: map['token']);
 }
