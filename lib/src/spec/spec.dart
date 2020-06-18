@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:meta/meta.dart';
 
 enum AttackType { none, melee, pierce }
@@ -173,17 +174,22 @@ class BuildingSpec implements MapUnitSpec {
 
   final Level10List<ConstResource> constructionCost;
 
+  final Level10List<Duration> constructionDuration;
+
+  @override
   final kind = Kind.building;
 
-  const BuildingSpec(
-      {@required this.type,
-      @required this.name,
-      @required this.description,
-      @required this.attackType,
-      @required this.armor,
-      @required this.pierceArmor,
-      @required this.hp,
-      @required this.constructionCost});
+  const BuildingSpec({
+    @required this.type,
+    @required this.name,
+    @required this.description,
+    @required this.attackType,
+    @required this.armor,
+    @required this.pierceArmor,
+    @required this.hp,
+    @required this.constructionCost,
+    @required this.constructionDuration,
+  });
 
   static BuildingSpec byType(int type) {
     // TODO
