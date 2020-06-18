@@ -8,6 +8,7 @@ export 'auth.dart';
 
 int numRows = 100;
 int numCols = 100;
+int numTiles = numRows * numCols;
 
 class LazyResource {
   final Resource resource;
@@ -38,6 +39,12 @@ class LazyResource {
         resource: resource + rate * duration,
         rate: newRate ?? rate,
         at: newTime);
+  }
+
+  bool hasEnough(ConstResource other) => resource > other;
+
+  void subtract(ConstResource other) {
+    resource.subtract(other);
   }
 
   String toPgsql() {
