@@ -1,3 +1,4 @@
+import 'package:common/common.dart';
 import 'package:meta/meta.dart';
 
 import '../spec/spec.dart';
@@ -5,20 +6,22 @@ import '../spec/spec.dart';
 import 'package:collection/collection.dart';
 
 export 'auth.dart';
-
-int numRows = 100;
-int numCols = 100;
-int numTiles = numRows * numCols;
+export 'resource.dart';
 
 class LazyResource {
   final Resource resource;
 
   final Resource rate;
 
+  final Resource max;
+
   final DateTime at;
 
   LazyResource(
-      {@required this.resource, @required this.rate, @required this.at});
+      {@required this.resource,
+      @required this.rate,
+      @required this.max,
+      @required this.at});
 
   factory LazyResource.fromMap(Map map) {
     if (map == null) return null;
@@ -26,6 +29,7 @@ class LazyResource {
     return LazyResource(
         resource: Resource.fromMap(map['resource']),
         rate: Resource.fromMap(map['rate']),
+        max: Resource.fromMap(map['max']),
         at: DateTime.parse(map['at']));
   }
 
@@ -34,9 +38,10 @@ class LazyResource {
       throw Exception('new time should be in future');
     }
 
-    final duration = at.difference(newTime).inSeconds;
+    final duration = newTime.difference(at).inSeconds;
     return LazyResource(
-        resource: resource + rate * duration,
+        resource: (resource + rate * duration)..limit(max),
+        max: max,
         rate: newRate ?? rate,
         at: newTime);
   }
@@ -45,10 +50,6 @@ class LazyResource {
 
   void subtract(ConstResource other) {
     resource.subtract(other);
-  }
-
-  String toPgsql() {
-    return '(${resource.toPgsql()}, ${rate.toPgsql()}, ${at.toIso8601String()})::LazyResource';
   }
 }
 
@@ -59,7 +60,11 @@ class BuildingTaskType {
 
   const BuildingTaskType._(this.id, this.name);
 
+  String toJson() => name;
+
   static BuildingTaskType fromString(String task) {
+    if (task == null) return none;
+
     switch (task) {
       case 'NONE':
         return none;
@@ -68,8 +73,6 @@ class BuildingTaskType {
       case 'RECRUIT':
         return recruit;
       default:
-        if (task == null) return none;
-
         throw UnsupportedError('unknown task type: $task');
     }
   }
@@ -134,36 +137,22 @@ class Player {
 
   final String name;
 
-  final String email;
+  final int numCities;
 
-  final String passwordHash;
-
-  final LazyResource resource;
-
-  final int maxBuildings;
-
-  final int maxPopulation;
-
-  final int numBuildings;
-
-  final int numWarriors;
-
+  /*
   final ResearchLevels researchLevels;
 
   final ResearchInfo researchInfo;
+   */
 
   Player({
     @required this.id,
     @required this.name,
-    @required this.email,
-    @required this.passwordHash,
-    @required this.resource,
-    @required this.maxBuildings,
-    @required this.maxPopulation,
-    @required this.numBuildings,
-    @required this.numWarriors,
+    @required this.numCities,
+    /*
     @required this.researchLevels,
     @required this.researchInfo,
+     */
   });
 }
 
@@ -172,28 +161,56 @@ class Position {
 
   int y;
 
-  Position.from1D(int pos) {
-    // TODO
+  Position({this.x = 0, this.y = 0});
+
+  factory Position.fromString(String value) {
+    if (!isValidPositionString(value)) {
+      throw ArgumentError('invalid position string');
+    }
+    final parts = value.split(':').map((e) => int.parse(e));
+    return Position(x: parts.elementAt(0), y: parts.elementAt(1));
   }
 
-  int to1D() => (y * numCols) + x;
+  factory Position.fromMap(Map map) =>
+      Position(x: map['x'] ?? map['f0'], y: map['y'] ?? map['f1']);
+
+  List<Position> getNeighbours() {
+    final ret = <Position>[];
+
+    for (int dx = -1; dx < 2; dx++) {
+      for (int dy = -1; dy < 2; dy++) {
+        final newX = x + dx;
+        if (newX < 0) continue;
+
+        final newY = y + dy;
+        if (newY < 0) continue;
+
+        if (newX == x && newY == y) continue;
+
+        ret.add(Position(x: newX, y: newY));
+      }
+    }
+
+    return ret;
+  }
+
+  String toJson() => toString();
+
+  @override
+  String toString() => '$x, $y';
+
+  static RegExp positionStringRegExp = RegExp(r'^\d{1,5}:\d{1,5}$');
+  static bool isValidPositionString(String value) {
+    return positionStringRegExp.hasMatch(value);
+  }
 }
 
-class WorldMap {
-  final Map<int, int> positions;
-
-  WorldMap({this.positions});
-}
-
-abstract class MapUnit {
+/*
+abstract class PlayableUnit implements MapUnit {
   int get id;
 
-  Position get position;
-
   MapUnitSpec get spec;
-}
 
-abstract class PlayableUnit implements MapUnit {
   int get hpPercentage;
 
   int get level;
@@ -221,15 +238,89 @@ abstract class PlayableUnit implements MapUnit {
     }
   }
 }
+ */
 
-class Building extends PlayableUnit {
-  final int id;
+class CityEntityKind {
+  final String name;
+
+  const CityEntityKind._({@required this.name});
+
+  static CityEntityKind fromName(String name) {
+    switch (name) {
+      case 'EMPTY':
+        return empty;
+      case 'FOREST':
+        return forest;
+      case 'HILL':
+        return hill;
+      case 'MOUNTAIN':
+        return mountain;
+      case 'LOOKNFEEL':
+        return lookNFeel;
+      case 'DECORATIVE':
+        return decorative;
+      case 'BUILDING':
+        return building;
+      case 'TOWER':
+        return tower;
+      case 'ENEMY':
+        return enemy;
+      default:
+        return null;
+    }
+  }
+
+  static const empty = CityEntityKind._(name: 'EMPTY');
+
+  static const forest = CityEntityKind._(name: 'FOREST');
+
+  static const hill = CityEntityKind._(name: 'HILL');
+
+  static const mountain = CityEntityKind._(name: 'MOUNTAIN');
+
+  static const lookNFeel = CityEntityKind._(name: 'LOOKNFEEL');
+
+  static const decorative = CityEntityKind._(name: 'DECORATIVE');
+
+  static const building = CityEntityKind._(name: 'BUILDING');
+
+  static const tower = CityEntityKind._(name: 'TOWER');
+
+  static const enemy = CityEntityKind._(name: 'ENEMY');
+}
+
+class CityEntity {
+  final int cityId;
 
   final Position position;
 
-  final int type;
+  final CityEntityKind kind;
 
-  final int playerId;
+  final int tenantId;
+
+  CityEntity({this.position, this.kind, this.cityId, this.tenantId});
+
+  Map<String, dynamic> toJson() => {
+        'cityId': cityId,
+        'position': position.toJson(),
+        // 'kind':
+        'tenantId': tenantId,
+      };
+}
+
+class Building implements CityEntity {
+  @override
+  final int id;
+
+  final int cityId;
+
+  @override
+  final Position position;
+
+  @override
+  final CityEntityKind kind = CityEntityKind.building;
+
+  final int type;
 
   final int level;
 
@@ -241,17 +332,29 @@ class Building extends PlayableUnit {
 
   Building(
       {@required this.id,
+      @required this.cityId,
       @required this.position,
       @required this.type,
-      @required this.playerId,
       @required this.level,
       @required this.hpPercentage,
       @required this.constructionEnd,
       @required this.taskType});
 
   @override
+  int get tenantId => id;
+
   BuildingSpec get spec => BuildingSpec.byType(type);
 
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'cityId': cityId,
+        'position': position.toJson(),
+        'level': level,
+        'constructionEnd': constructionEnd?.toIso8601String(),
+        'taskType': taskType?.toJson(),
+      };
+
+  /* TODO
   @override
   int getArmor() {
     // TODO
@@ -273,24 +376,43 @@ class Building extends PlayableUnit {
     // TODO: implement hpToPercentage
     throw UnimplementedError();
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'position': position,
+      'type': type,
+      'playerId': playerId,
+      'level': level,
+    };
+  }*/
 }
 
+/*
 class Warrior extends PlayableUnit {
+  @override
   final int id;
 
   final int type;
 
+  @override
   final int playerId;
 
+  @override
   final int level;
 
+  @override
   final Position position;
 
   final DateTime lastMoved;
 
+  @override
   final int hpPercentage;
 
   final int attacking;
+
+  @override
+  Kind get kind => Kind.warrior;
 
   Warrior(
       {@required this.id,
@@ -302,6 +424,7 @@ class Warrior extends PlayableUnit {
       @required this.lastMoved,
       @required this.attacking});
 
+  @override
   WarriorSpec get spec => WarriorSpec.byType(type);
 
   @override
@@ -329,10 +452,5 @@ class Warrior extends PlayableUnit {
     // TODO: implement hpToPercentage
     throw UnimplementedError();
   }
-}
-
-/*
-class Terrain implements MapUnit {
-  // TODO
 }
  */
