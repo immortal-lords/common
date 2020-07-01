@@ -8,6 +8,22 @@ abstract class CityEntity {
   String get kind;
 
   dynamic toJson();
+
+  static CityEntity fromMap(Map map) {
+    final kind = map['kind'];
+    if (kind == null) {
+      throw Exception('kind cannot be null');
+    }
+
+    switch (kind) {
+      case 'TERRAIN':
+        return CityTerrain.fromMap(map);
+      case 'BUILDING':
+        return Building.fromMap(map);
+      default:
+        throw Exception('unknown city entity kind: $kind');
+    }
+  }
 }
 
 class CityTerrain implements CityEntity {
@@ -20,6 +36,9 @@ class CityTerrain implements CityEntity {
   final String kind = 'TERRAIN';
 
   CityTerrain({@required this.position, @required this.type});
+
+  static CityTerrain fromMap(Map map) => CityTerrain(
+      position: Position.fromString(map['position']), type: map['type']);
 
   @override
   Map<String, dynamic> toJson() => {
@@ -48,6 +67,12 @@ class Building implements CityEntity {
       @required this.position,
       @required this.level});
 
+  static Building fromMap(Map map) => Building(
+      id: map['id'],
+      type: map['type'],
+      position: Position.fromString(map['position']),
+      level: map['level']);
+
   @override
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -72,6 +97,13 @@ class City {
       @required this.name,
       @required this.children,
       @required this.resources});
+
+  static City fromMap(Map map) => City(
+      id: map['id'],
+      name: map['name'],
+      children: (map['children'] as Map).map((key, value) =>
+          MapEntry(Position.fromString(key), CityEntity.fromMap(value))),
+      resources: LazyResource.fromMap(map['resources']));
 
   Map<String, dynamic> toJson() => {
         'id': id,

@@ -8,6 +8,7 @@ import 'package:collection/collection.dart';
 export 'auth.dart';
 export '../spec/resource.dart';
 export 'city.dart';
+export 'player.dart';
 
 class Alliance {
   final int id;
