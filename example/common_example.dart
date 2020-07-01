@@ -9,6 +9,11 @@ Future<void> main() async {
   final api = Api(baseUrl: 'http://localhost:15000/');
   await api
       .login(LoginRequest(email: 'knight@example.com', password: 'S3cr3t'));
-  print(await api.getMyEmpire());
+  final empire = await api.getMyEmpire();
+  print(empire);
+
+  final city = await api.getMyCityById(empire.cities[0].id);
+  print(city);
+
   // TODO
 }

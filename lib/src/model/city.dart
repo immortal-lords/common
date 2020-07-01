@@ -98,6 +98,9 @@ class City {
       @required this.children,
       @required this.resources});
 
+  @override
+  String toString() => toJson().toString();
+
   static City fromMap(Map map) => City(
       id: map['id'],
       name: map['name'],
