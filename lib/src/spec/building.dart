@@ -1,6 +1,35 @@
 import 'package:common/common.dart';
 import 'package:meta/meta.dart';
 
+class BuildingTaskType {
+  final int id;
+
+  final String name;
+
+  const BuildingTaskType._(this.id, this.name);
+
+  String toJson() => name;
+
+  static BuildingTaskType fromString(String task) {
+    if (task == null) return none;
+
+    switch (task) {
+      case 'NONE':
+        return none;
+      case 'UPGRADE':
+        return upgrade;
+      case 'RECRUIT':
+        return recruit;
+      default:
+        throw UnsupportedError('unknown task type: $task');
+    }
+  }
+
+  static const none = BuildingTaskType._(0, 'NONE');
+  static const upgrade = BuildingTaskType._(1, 'UPGRADE');
+  static const recruit = BuildingTaskType._(2, 'RECRUIT');
+}
+
 class BuildingSpec {
   final int type;
 

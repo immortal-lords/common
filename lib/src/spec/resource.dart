@@ -1,4 +1,4 @@
-
+import 'package:meta/meta.dart';
 
 class ConstResource {
   final int wood;
@@ -52,6 +52,12 @@ class ConstResource {
     }
     throw UnsupportedError('not supported type ${other.runtimeType}');
   }
+
+  Map<String, dynamic> toJson() => {
+        'wood': wood,
+        'stone': stone,
+        'gold': gold,
+      };
 }
 
 class Resource implements ConstResource {
@@ -157,4 +163,63 @@ class Resource implements ConstResource {
     }
     throw UnsupportedError('not supported type ${other.runtimeType}');
   }
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'wood': wood,
+        'stone': stone,
+        'gold': gold,
+      };
+}
+
+class LazyResource {
+  final Resource resource;
+
+  final Resource rate;
+
+  final Resource max;
+
+  final DateTime at;
+
+  LazyResource(
+      {@required this.resource,
+      @required this.rate,
+      @required this.max,
+      @required this.at});
+
+  factory LazyResource.fromMap(Map map) {
+    if (map == null) return null;
+
+    return LazyResource(
+        resource: Resource.fromMap(map['resource']),
+        rate: Resource.fromMap(map['rate']),
+        max: Resource.fromMap(map['max']),
+        at: DateTime.parse(map['at']));
+  }
+
+  LazyResource resourcesAt(DateTime newTime, {Resource newRate}) {
+    if (newTime.isBefore(at)) {
+      throw Exception('new time should be in future');
+    }
+
+    final duration = newTime.difference(at).inSeconds;
+    return LazyResource(
+        resource: (resource + rate * duration)..limit(max),
+        max: max,
+        rate: newRate ?? rate,
+        at: newTime);
+  }
+
+  bool hasEnough(ConstResource other) => resource > other;
+
+  void subtract(ConstResource other) {
+    resource.subtract(other);
+  }
+
+  Map<String, dynamic> toJson() => {
+        'resource': resource.toJson(),
+        'rate': rate.toJson(),
+        'max': max.toJson(),
+        'at': at.toIso8601String(),
+      };
 }

@@ -2,6 +2,8 @@ import 'package:meta/meta.dart';
 
 export 'building.dart';
 export 'warrior.dart';
+export 'position.dart';
+export 'resource.dart';
 
 const numColsInCity = 15;
 const numRowsInCity = 15;
