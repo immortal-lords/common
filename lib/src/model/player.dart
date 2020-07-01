@@ -38,10 +38,14 @@ class Empire {
         'cities': cities.map((e) => e.toJson()).toList(),
       };
 
+  @override
+  String toString() => toJson().toString();
+
   static Empire fromMap(Map map) => Empire(
       id: map['id'],
       name: map['name'],
-      cities: (map['cities'] as List<Map>)
+      cities: (map['cities'] as List)
+          .cast<Map>()
           .map((e) => EmpireCity.fromMap(e))
           .toList());
 }

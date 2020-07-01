@@ -11,6 +11,9 @@ class SignupRequest implements Validatable {
   SignupRequest(
       {@required this.name, @required this.email, @required this.password});
 
+  Map<String, dynamic> toJson() =>
+      {'name': name, 'email': email, 'password': password};
+
   static SignupRequest fromMap(Map map) {
     if (map == null) return null;
 
@@ -57,6 +60,8 @@ class LoginRequest implements Validatable {
   final String password;
 
   LoginRequest({this.email, this.password});
+
+  Map<String, dynamic> toJson() => {'email': email, 'password': password};
 
   static LoginRequest fromMap(Map map) =>
       LoginRequest(email: map['email'], password: map['password']);

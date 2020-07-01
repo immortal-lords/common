@@ -1,12 +1,10 @@
 import 'package:common/common.dart';
 import 'package:common/src/api/auth.dart';
 import 'package:common/src/api/city.dart';
-import 'package:common/src/api/player.dart';
+import 'package:common/src/api/empire.dart';
 import 'package:common/src/model/auth.dart';
 import 'package:common/src/model/city.dart';
 import 'package:common/src/model/model.dart';
-
-import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 
 abstract class Api {
   factory Api({String baseUrl}) = _ApiImpl;
