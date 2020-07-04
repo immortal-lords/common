@@ -7,6 +7,8 @@ abstract class CityEntity {
 
   String get kind;
 
+  bool isEqual(CityEntity other);
+
   dynamic toJson();
 
   static CityEntity fromMap(Map map) {
@@ -37,6 +39,25 @@ class CityTerrain implements CityEntity {
 
   CityTerrain({@required this.position, @required this.type});
 
+  @override
+  bool isEqual(final CityEntity other) {
+    if (other is! CityTerrain) {
+      return false;
+    }
+
+    if (other is CityTerrain) {
+      if (position != other.position) {
+        return false;
+      }
+
+      if (type != other.type) {
+        return false;
+      }
+
+      return true;
+    }
+  }
+
   static CityTerrain fromMap(Map map) => CityTerrain(
       position: Position.fromString(map['position']), type: map['type']);
 
@@ -66,6 +87,33 @@ class Building implements CityEntity {
       @required this.type,
       @required this.position,
       @required this.level});
+
+  @override
+  bool isEqual(final CityEntity other) {
+    if (other is! Building) {
+      return false;
+    }
+
+    if (other is Building) {
+      if (id != other.id) {
+        return false;
+      }
+
+      if (position != other.position) {
+        return false;
+      }
+
+      if (type != other.type) {
+        return false;
+      }
+
+      if (level != other.level) {
+        return false;
+      }
+
+      return true;
+    }
+  }
 
   static Building fromMap(Map map) => Building(
       id: map['id'],

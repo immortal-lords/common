@@ -5,6 +5,10 @@ class Position {
 
   Position({this.x = 0, this.y = 0});
 
+  @override
+  bool operator ==(Object other) =>
+      other is Position && (x == other.x && y == other.y);
+
   factory Position.fromString(String value) {
     if (!isValidPositionString(value)) {
       throw ArgumentError('invalid position string');
