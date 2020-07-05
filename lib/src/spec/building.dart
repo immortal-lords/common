@@ -49,6 +49,10 @@ class BuildingSpec {
 
   final Level10List<Duration> constructionDuration;
 
+  final Level10List<int> production1;
+
+  final Level10List<int> production2;
+
   const BuildingSpec({
     @required this.type,
     @required this.name,
@@ -59,6 +63,8 @@ class BuildingSpec {
     @required this.hp,
     @required this.constructionCost,
     @required this.constructionDuration,
+    @required this.production1,
+    @required this.production2,
   });
 
   static BuildingSpec byType(int type) {
@@ -74,71 +80,75 @@ class BuildingSpec {
   static const lumberCamp = BuildingSpec(
     type: 0,
     name: 'Lumber camp',
-    description: null,
+    description: '',
     armor: Level10List.same(10),
     pierceArmor: Level10List.same(10),
     hp: Level10List.same(100),
-    constructionCost: Level10List.same(ConstResource(wood: 1)),
-    constructionDuration: Level10List.same(Duration(minutes: 1)),
+    constructionCost: Level10List(
+      level1: ConstResource(wood: 100),
+      level2: ConstResource(wood: 100),
+      level3: ConstResource(wood: 100),
+      level4: ConstResource(wood: 100),
+      level5: ConstResource(wood: 100),
+      level6: ConstResource(wood: 100),
+      level7: ConstResource(wood: 100),
+      level8: ConstResource(wood: 100),
+      level9: ConstResource(wood: 100),
+      level10: ConstResource(wood: 100),
+    ),
+    constructionDuration: Level10List(
+      level1: Duration(minutes: 1),
+      level2: Duration(minutes: 1),
+      level3: Duration(minutes: 1),
+      level4: Duration(minutes: 1),
+      level5: Duration(minutes: 1),
+      level6: Duration(minutes: 1),
+      level7: Duration(minutes: 1),
+      level8: Duration(minutes: 1),
+      level9: Duration(minutes: 1),
+      level10: Duration(minutes: 1),
+    ),
   );
 
   static const quarry = BuildingSpec(
-      type: null,
+      type: 1,
       name: 'Quarry',
-      description: null,
+      description: '',
       armor: null,
       pierceArmor: null,
       hp: null,
       constructionCost: null);
 
-  static const mine = BuildingSpec(
-      type: null,
-      name: 'Mine',
-      description: null,
+  static const goldMine = BuildingSpec(
+      type: 2,
+      name: 'Gold mine',
+      description: '',
       armor: null,
       pierceArmor: null,
       hp: null,
       constructionCost: null);
 
-  static const houses = BuildingSpec(
-      type: null,
-      name: null,
-      description: null,
+  static const warehouse = BuildingSpec(
+      type: 3,
+      name: 'Warehouse',
+      description: '',
       armor: null,
       pierceArmor: null,
       hp: null,
       constructionCost: null);
 
   static const barracks = BuildingSpec(
-      type: null,
-      name: null,
-      description: null,
+      type: 4,
+      name: 'Barracks',
+      description: '',
       armor: null,
       pierceArmor: null,
       hp: null,
       constructionCost: null);
 
   static const sanctum = BuildingSpec(
-      type: null,
-      name: null,
-      description: null,
-      armor: null,
-      pierceArmor: null,
-      hp: null,
-      constructionCost: null);
-
-  static const fort = BuildingSpec(
-      type: null,
-      name: null,
-      description: null,
-      armor: null,
-      pierceArmor: null,
-      hp: null,
-      constructionCost: null);
-
-  static const outpost = BuildingSpec(
-      type: null,
-      name: null,
+      type: 5,
+      name: 'Sanctum',
       description: null,
       armor: null,
       pierceArmor: null,

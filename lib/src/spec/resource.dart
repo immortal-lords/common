@@ -197,7 +197,7 @@ class LazyResource {
         at: DateTime.parse(map['at']));
   }
 
-  LazyResource resourcesAt(DateTime newTime, {Resource newRate}) {
+  LazyResource cloneAt(DateTime newTime, {Resource newRate}) {
     if (newTime.isBefore(at)) {
       throw Exception('new time should be in future');
     }
@@ -208,6 +208,11 @@ class LazyResource {
         max: max,
         rate: newRate ?? rate,
         at: newTime);
+  }
+
+  Resource resourcesAt(DateTime when) {
+    final duration = when.difference(at).inSeconds;
+    return (resource + rate * duration)..limit(max);
   }
 
   bool hasEnough(ConstResource other) => resource > other;
