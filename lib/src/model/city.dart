@@ -89,6 +89,8 @@ class Building implements CityEntity {
 
   final int level;
 
+  final DateTime constructionStart;
+
   final DateTime constructionEnd;
 
   @override
@@ -101,6 +103,7 @@ class Building implements CityEntity {
       @required this.type,
       @required this.position,
       @required this.level,
+      @required this.constructionStart,
       @required this.constructionEnd})
       : spec = BuildingSpec.byType(type);
 
@@ -114,10 +117,6 @@ class Building implements CityEntity {
 
   @override
   bool isEqual(final CityEntity other) {
-    if (other is! Building) {
-      return false;
-    }
-
     if (other is Building) {
       if (id != other.id) {
         return false;
@@ -135,17 +134,27 @@ class Building implements CityEntity {
         return false;
       }
 
-      if(constructionEnd != other.constructionEnd) {
+      if (constructionStart != other.constructionStart) {
+        return false;
+      }
+
+      if (constructionEnd != other.constructionEnd) {
         return false;
       }
 
       return true;
+    } else {
+      return false;
     }
   }
 
   static Building fromMap(Map map) {
+    DateTime constructionStart;
+    if (map['constructionStart'] != null) {
+      constructionStart = DateTime.parse(map['constructionStart']);
+    }
+
     DateTime constructionEnd;
-    print(map['constructionEnd']);
     if (map['constructionEnd'] != null) {
       constructionEnd = DateTime.parse(map['constructionEnd']);
     }
@@ -155,6 +164,7 @@ class Building implements CityEntity {
         type: map['type'],
         position: Position.fromString(map['position']),
         level: map['level'],
+        constructionStart: constructionStart,
         constructionEnd: constructionEnd);
   }
 
@@ -165,6 +175,7 @@ class Building implements CityEntity {
         'position': position.toJson(),
         'level': level,
         'kind': kind,
+        'constructionStart': constructionStart?.toUtc()?.toIso8601String(),
         'constructionEnd': constructionEnd?.toUtc()?.toIso8601String(),
       };
 }

@@ -7,11 +7,16 @@ import 'package:common/src/model/city.dart';
 import 'package:common/src/model/model.dart';
 
 abstract class Api {
-  factory Api({String baseUrl}) = _ApiImpl;
+  factory Api(
+      {String baseUrl,
+      TokenStore tokenStore,
+      Function onSessionExpire}) = _ApiImpl;
 
   String get baseUrl;
 
-  String authToken;
+  TokenStore get tokenStore;
+
+  Function get onSessionExpire;
 
   Future<SignupResponse> signup(SignupRequest payload);
 
@@ -34,7 +39,27 @@ class _ApiImpl with AuthApi, CityApi, PlayerApi implements Api {
   @override
   final String baseUrl;
 
-  String authToken;
+  final TokenStore tokenStore;
 
-  _ApiImpl({this.baseUrl: ''});
+  @override
+  final Function onSessionExpire;
+
+  _ApiImpl({TokenStore tokenStore, this.baseUrl: '', this.onSessionExpire})
+      : tokenStore = tokenStore ?? _TokenStoreImpl();
+}
+
+abstract class TokenStore {
+  void store(String token);
+
+  String load();
+}
+
+class _TokenStoreImpl implements TokenStore {
+  String _token;
+
+  @override
+  void store(String token) => _token = token;
+
+  @override
+  String load() => _token;
 }

@@ -12,11 +12,12 @@ abstract class CityApi implements Api {
     final response = await resty.Get(baseUrl)
         .path('/api/1.0')
         .path('/cities/${cityId}')
-        .header('X-Auth-Token', authToken)
+        .header('X-Auth-Token', tokenStore.load())
         .go();
     if (response.statusCode == 400) {
       throw Exception('bad request'); // TODO
     } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
       throw Exception('authorization failed');
     } else if (response.statusCode == 500) {
       throw Exception('server error'); // TODO
@@ -32,16 +33,17 @@ abstract class CityApi implements Api {
 
   @override
   Future<Building> construct(int cityId, Position position, int type) async {
-    final response = await resty.Get(baseUrl)
+    final response = await resty.Post(baseUrl)
         .path('/api/1.0')
         .path('/cities/${cityId}/buildings/construct')
-        .header('X-Auth-Token', authToken)
+        .header('X-Auth-Token', tokenStore.load())
         .query('position', position.toJson())
-        .query('type', type.toString())
+        .query('buildingType', type.toString())
         .go();
     if (response.statusCode == 400) {
       throw Exception('bad request'); // TODO
     } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
       throw Exception('authorization failed');
     } else if (response.statusCode == 500) {
       throw Exception('server error'); // TODO
@@ -60,12 +62,13 @@ abstract class CityApi implements Api {
     final response = await resty.Post(baseUrl)
         .path('/api/1.0')
         .path('/cities/${cityId}/buildings/${buildingId}/upgrade')
-        .header('X-Auth-Token', authToken)
+        .header('X-Auth-Token', tokenStore.load())
         .query('buildingLevel', level.toString())
         .go();
     if (response.statusCode == 400) {
       throw Exception('bad request'); // TODO
     } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
       throw Exception('authorization failed');
     } else if (response.statusCode == 500) {
       throw Exception('server error'); // TODO
@@ -79,11 +82,12 @@ abstract class CityApi implements Api {
     final response = await resty.Post(baseUrl)
         .path('/api/1.0')
         .path('/cities/${cityId}/buildings/${buildingId}/demolish')
-        .header('X-Auth-Token', authToken)
+        .header('X-Auth-Token', tokenStore.load())
         .go();
     if (response.statusCode == 400) {
       throw Exception('bad request'); // TODO
     } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
       throw Exception('authorization failed');
     } else if (response.statusCode == 500) {
       throw Exception('server error'); // TODO

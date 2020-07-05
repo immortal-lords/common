@@ -45,7 +45,7 @@ abstract class AuthApi implements Api {
     final map = jsonDecode(response.body);
     final ret = LoginResponse.fromMap(map);
 
-    authToken = ret.token;
+    tokenStore.store(ret.token);
 
     return ret;
   }

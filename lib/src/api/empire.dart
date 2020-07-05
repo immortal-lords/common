@@ -11,11 +11,12 @@ abstract class PlayerApi implements Api {
     final response = await resty.Get(baseUrl)
         .path('/api/1.0')
         .path('/empire')
-        .header('X-Auth-Token', authToken)
+        .header('X-Auth-Token', tokenStore.load())
         .go();
     if (response.statusCode == 400) {
       throw Exception('bad request'); // TODO
     } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
       throw Exception('authorization failed');
     } else if (response.statusCode == 500) {
       throw Exception('server error'); // TODO
@@ -31,14 +32,16 @@ abstract class PlayerApi implements Api {
 
   @override
   Future<Empire> firstCity() async {
-    final response = await resty.post(baseUrl)
+    final response = await resty
+        .post(baseUrl)
         .path('/api/1.0')
         .path('/empire/firstCity')
-        .header('X-Auth-Token', authToken)
+        .header('X-Auth-Token', tokenStore.load())
         .go();
     if (response.statusCode == 400) {
       throw Exception('bad request'); // TODO
     } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
       throw Exception('authorization failed');
     } else if (response.statusCode == 500) {
       throw Exception('server error'); // TODO
