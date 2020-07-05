@@ -11,6 +11,10 @@ abstract class CityEntity {
 
   dynamic toJson();
 
+  bool get isTerrain;
+
+  bool get isBuilding;
+
   static CityEntity fromMap(Map map) {
     final kind = map['kind'];
     if (kind == null) {
@@ -40,11 +44,15 @@ class CityTerrain implements CityEntity {
   CityTerrain({@required this.position, @required this.type});
 
   @override
-  bool isEqual(final CityEntity other) {
-    if (other is! CityTerrain) {
-      return false;
-    }
+  bool get isTerrain => true;
 
+  @override
+  bool get isBuilding => false;
+
+  String get css => type.toLowerCase();
+
+  @override
+  bool isEqual(final CityEntity other) {
     if (other is CityTerrain) {
       if (position != other.position) {
         return false;
@@ -55,6 +63,8 @@ class CityTerrain implements CityEntity {
       }
 
       return true;
+    } else {
+      return false;
     }
   }
 
@@ -79,14 +89,28 @@ class Building implements CityEntity {
 
   final int level;
 
+  final DateTime constructionEnd;
+
   @override
   final String kind = 'BUILDING';
+
+  final BuildingSpec spec;
 
   Building(
       {@required this.id,
       @required this.type,
       @required this.position,
-      @required this.level});
+      @required this.level,
+      @required this.constructionEnd})
+      : spec = BuildingSpec.byType(type);
+
+  @override
+  bool get isTerrain => false;
+
+  @override
+  bool get isBuilding => true;
+
+  String get css => spec.name.replaceAll(' ', '-').toLowerCase();
 
   @override
   bool isEqual(final CityEntity other) {
@@ -111,15 +135,28 @@ class Building implements CityEntity {
         return false;
       }
 
+      if(constructionEnd != other.constructionEnd) {
+        return false;
+      }
+
       return true;
     }
   }
 
-  static Building fromMap(Map map) => Building(
-      id: map['id'],
-      type: map['type'],
-      position: Position.fromString(map['position']),
-      level: map['level']);
+  static Building fromMap(Map map) {
+    DateTime constructionEnd;
+    print(map['constructionEnd']);
+    if (map['constructionEnd'] != null) {
+      constructionEnd = DateTime.parse(map['constructionEnd']);
+    }
+
+    return Building(
+        id: map['id'],
+        type: map['type'],
+        position: Position.fromString(map['position']),
+        level: map['level'],
+        constructionEnd: constructionEnd);
+  }
 
   @override
   Map<String, dynamic> toJson() => {
@@ -128,6 +165,7 @@ class Building implements CityEntity {
         'position': position.toJson(),
         'level': level,
         'kind': kind,
+        'constructionEnd': constructionEnd?.toUtc()?.toIso8601String(),
       };
 }
 

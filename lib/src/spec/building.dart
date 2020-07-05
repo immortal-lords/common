@@ -73,7 +73,7 @@ class BuildingSpec {
 
   static const lumberCamp = BuildingSpec(
     type: 0,
-    name: null,
+    name: 'Lumber camp',
     description: null,
     armor: Level10List.same(10),
     pierceArmor: Level10List.same(10),
@@ -84,7 +84,7 @@ class BuildingSpec {
 
   static const quarry = BuildingSpec(
       type: null,
-      name: null,
+      name: 'Quarry',
       description: null,
       armor: null,
       pierceArmor: null,
@@ -93,7 +93,7 @@ class BuildingSpec {
 
   static const mine = BuildingSpec(
       type: null,
-      name: null,
+      name: 'Mine',
       description: null,
       armor: null,
       pierceArmor: null,

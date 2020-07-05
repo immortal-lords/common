@@ -57,11 +57,11 @@ abstract class CityApi implements Api {
 
   @override
   Future<void> upgrade(int cityId, int buildingId, int level) async {
-    final response = await resty.Get(baseUrl)
+    final response = await resty.Post(baseUrl)
         .path('/api/1.0')
         .path('/cities/${cityId}/buildings/${buildingId}/upgrade')
         .header('X-Auth-Token', authToken)
-        .query('level', level.toString())
+        .query('buildingLevel', level.toString())
         .go();
     if (response.statusCode == 400) {
       throw Exception('bad request'); // TODO
@@ -76,7 +76,7 @@ abstract class CityApi implements Api {
 
   @override
   Future<void> demolish(int cityId, int buildingId) async {
-    final response = await resty.Get(baseUrl)
+    final response = await resty.Post(baseUrl)
         .path('/api/1.0')
         .path('/cities/${cityId}/buildings/${buildingId}/demolish')
         .header('X-Auth-Token', authToken)
