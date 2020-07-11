@@ -2,9 +2,7 @@ import 'package:common/common.dart';
 import 'package:common/src/api/auth.dart';
 import 'package:common/src/api/city.dart';
 import 'package:common/src/api/empire.dart';
-import 'package:common/src/model/auth.dart';
-import 'package:common/src/model/city.dart';
-import 'package:common/src/model/model.dart';
+import 'package:common/view.dart';
 
 abstract class Api {
   factory Api(

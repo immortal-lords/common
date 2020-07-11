@@ -9,18 +9,28 @@ class EmpireCity {
 
   final Position position;
 
-  EmpireCity({@required this.id, @required this.name, @required this.position});
+  final int level;
+
+  EmpireCity({
+    @required this.id,
+    @required this.name,
+    @required this.position,
+    @required this.level,
+  });
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,
         'position': position.toJson(),
+        'level': level,
       };
 
   static EmpireCity fromMap(Map map) => EmpireCity(
-      id: map['id'],
-      name: map['name'],
-      position: Position.fromString(map['position']));
+        id: map['id'],
+        name: map['name'],
+        position: Position.fromString(map['position']),
+        level: map['level'],
+      );
 }
 
 class Empire {

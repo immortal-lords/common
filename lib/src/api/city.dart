@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:common/common.dart';
 import 'package:common/src/api/api.dart';
-import 'package:common/src/model/city.dart';
+import 'package:common/view.dart';
 
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 

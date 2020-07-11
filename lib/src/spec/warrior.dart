@@ -12,17 +12,17 @@ class WarriorSpec {
 
   final bool isMythical;
 
-  final Level10List<int> armor;
+  final Level20List<int> armor;
 
-  final Level10List<int> pierceArmor;
+  final Level20List<int> pierceArmor;
 
-  final Level10List<int> hp;
+  final Level20List<int> hp;
 
-  final Level10List<int> damage;
+  final Level20List<int> damage;
 
-  final Level10List<ConstResource> recruitmentCost;
+  final Level20List<ConstResource> recruitmentCost;
 
-  final Level10List<int> recruitmentDuration;
+  final Level20List<int> recruitmentDuration;
 
   const WarriorSpec(
       {@required this.type,
@@ -53,7 +53,7 @@ class WarriorSpec {
       name: 'Militia',
       description: '',
       isMythical: false,
-      armor: Level10List(
+      armor: Level20List(
           level1: 0,
           level2: 1,
           level3: 2,
@@ -64,7 +64,7 @@ class WarriorSpec {
           level8: 7,
           level9: 8,
           level10: 9),
-      pierceArmor: Level10List(
+      pierceArmor: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -75,7 +75,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      hp: Level10List(
+      hp: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -86,7 +86,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      damage: Level10List(
+      damage: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -97,7 +97,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      recruitmentCost: Level10List(
+      recruitmentCost: Level20List(
           level1: ConstResource(wood: 10),
           level2: ConstResource(wood: 10),
           level3: ConstResource(wood: 10),
@@ -114,7 +114,7 @@ class WarriorSpec {
       name: 'Archer',
       description: '',
       isMythical: false,
-      armor: Level10List(
+      armor: Level20List(
           level1: 0,
           level2: 1,
           level3: 2,
@@ -125,7 +125,7 @@ class WarriorSpec {
           level8: 7,
           level9: 8,
           level10: 9),
-      pierceArmor: Level10List(
+      pierceArmor: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -136,7 +136,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      hp: Level10List(
+      hp: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -147,7 +147,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      damage: Level10List(
+      damage: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -158,7 +158,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      recruitmentCost: Level10List(
+      recruitmentCost: Level20List(
           level1: ConstResource(wood: 10),
           level2: ConstResource(wood: 10),
           level3: ConstResource(wood: 10),
@@ -175,7 +175,7 @@ class WarriorSpec {
       name: 'Paladin',
       description: '',
       isMythical: false,
-      armor: Level10List(
+      armor: Level20List(
           level1: 0,
           level2: 1,
           level3: 2,
@@ -186,7 +186,7 @@ class WarriorSpec {
           level8: 7,
           level9: 8,
           level10: 9),
-      pierceArmor: Level10List(
+      pierceArmor: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -197,7 +197,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      hp: Level10List(
+      hp: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -208,7 +208,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      damage: Level10List(
+      damage: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -219,7 +219,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      recruitmentCost: Level10List(
+      recruitmentCost: Level20List(
           level1: ConstResource(wood: 10),
           level2: ConstResource(wood: 10),
           level3: ConstResource(wood: 10),
@@ -236,7 +236,7 @@ class WarriorSpec {
       name: 'Halbadier',
       description: '',
       isMythical: false,
-      armor: Level10List(
+      armor: Level20List(
           level1: 0,
           level2: 1,
           level3: 2,
@@ -247,7 +247,7 @@ class WarriorSpec {
           level8: 7,
           level9: 8,
           level10: 9),
-      pierceArmor: Level10List(
+      pierceArmor: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -258,7 +258,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      hp: Level10List(
+      hp: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -269,7 +269,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      damage: Level10List(
+      damage: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -280,7 +280,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      recruitmentCost: Level10List(
+      recruitmentCost: Level20List(
           level1: ConstResource(wood: 10),
           level2: ConstResource(wood: 10),
           level3: ConstResource(wood: 10),
@@ -297,7 +297,7 @@ class WarriorSpec {
       name: 'Halbadier',
       description: '',
       isMythical: false,
-      armor: Level10List(
+      armor: Level20List(
           level1: 0,
           level2: 1,
           level3: 2,
@@ -308,7 +308,7 @@ class WarriorSpec {
           level8: 7,
           level9: 8,
           level10: 9),
-      pierceArmor: Level10List(
+      pierceArmor: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -319,7 +319,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      hp: Level10List(
+      hp: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -330,7 +330,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      damage: Level10List(
+      damage: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -341,7 +341,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      recruitmentCost: Level10List(
+      recruitmentCost: Level20List(
           level1: ConstResource(wood: 10),
           level2: ConstResource(wood: 10),
           level3: ConstResource(wood: 10),
@@ -358,7 +358,7 @@ class WarriorSpec {
       name: 'Halbadier',
       description: '',
       isMythical: false,
-      armor: Level10List(
+      armor: Level20List(
           level1: 0,
           level2: 1,
           level3: 2,
@@ -369,7 +369,7 @@ class WarriorSpec {
           level8: 7,
           level9: 8,
           level10: 9),
-      pierceArmor: Level10List(
+      pierceArmor: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -380,7 +380,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      hp: Level10List(
+      hp: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -391,7 +391,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      damage: Level10List(
+      damage: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -402,7 +402,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      recruitmentCost: Level10List(
+      recruitmentCost: Level20List(
           level1: ConstResource(wood: 10),
           level2: ConstResource(wood: 10),
           level3: ConstResource(wood: 10),
@@ -419,7 +419,7 @@ class WarriorSpec {
       name: 'Halbadier',
       description: '',
       isMythical: false,
-      armor: Level10List(
+      armor: Level20List(
           level1: 0,
           level2: 1,
           level3: 2,
@@ -430,7 +430,7 @@ class WarriorSpec {
           level8: 7,
           level9: 8,
           level10: 9),
-      pierceArmor: Level10List(
+      pierceArmor: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -441,7 +441,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      hp: Level10List(
+      hp: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -452,7 +452,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      damage: Level10List(
+      damage: Level20List(
           level1: 0,
           level2: 0,
           level3: 0,
@@ -463,7 +463,7 @@ class WarriorSpec {
           level8: 0,
           level9: 0,
           level10: 0),
-      recruitmentCost: Level10List(
+      recruitmentCost: Level20List(
           level1: ConstResource(wood: 10),
           level2: ConstResource(wood: 10),
           level3: ConstResource(wood: 10),

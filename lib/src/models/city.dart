@@ -185,31 +185,65 @@ class City {
 
   final String name;
 
+  final Position position;
+
   final Map<Position, CityEntity> children;
 
   final LazyResource resources;
 
-  City(
-      {@required this.id,
-      @required this.name,
-      @required this.children,
-      @required this.resources});
+  final int level;
+
+  final int constructionSpeed;
+
+  final int numBuildings;
+
+  final int troopSpace;
+
+  final int recruitmentSpeed;
+
+  City({
+    @required this.id,
+    @required this.name,
+    @required this.position,
+    @required this.children,
+    @required this.resources,
+    @required this.level,
+    @required this.constructionSpeed,
+    @required this.numBuildings,
+    @required this.troopSpace,
+    @required this.recruitmentSpeed,
+  });
+
+  int get maxBuildings => level * 5;
 
   @override
   String toString() => toJson().toString();
 
   static City fromMap(Map map) => City(
-      id: map['id'],
-      name: map['name'],
-      children: (map['children'] as Map).map((key, value) =>
-          MapEntry(Position.fromString(key), CityEntity.fromMap(value))),
-      resources: LazyResource.fromMap(map['resources']));
+        id: map['id'],
+        name: map['name'],
+        position: Position.fromString(map['position']),
+        children: (map['children'] as Map).map((key, value) =>
+            MapEntry(Position.fromString(key), CityEntity.fromMap(value))),
+        resources: LazyResource.fromMap(map['resources']),
+        level: map['level'],
+        numBuildings: map['numBuildings'],
+        constructionSpeed: map['constructionSpeed'],
+        troopSpace: map['troopSpace'],
+        recruitmentSpeed: map['recruitmentSpeed'],
+      );
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,
+        'position': position.toJson(),
         'children': children
             .map((key, value) => MapEntry(key.toJson(), value.toJson())),
         'resources': resources.toJson(),
+        'level': level,
+        'numBuildings': numBuildings,
+        'constructionSpeed': constructionSpeed,
+        'troopSpace': troopSpace,
+        'recruitmentSpeed': recruitmentSpeed,
       };
 }

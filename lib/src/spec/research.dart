@@ -8,9 +8,9 @@ class ResearchSpec {
 
   final String description;
 
-  final Level10List<Resource> cost;
+  final Level20List<Resource> cost;
 
-  final Level10List<int> duration;
+  final Level20List<int> duration;
 
   ResearchSpec(
       {@required this.technologyId,

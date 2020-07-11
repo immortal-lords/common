@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:common/src/api/api.dart';
-import 'package:common/src/model/model.dart';
+import 'package:common/view.dart';
 
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 

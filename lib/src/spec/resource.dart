@@ -185,7 +185,7 @@ class LazyResource {
       {@required this.resource,
       @required this.rate,
       @required this.max,
-      @required this.at});
+      @required DateTime at}): at = _truncate(at);
 
   factory LazyResource.fromMap(Map map) {
     if (map == null) return null;
@@ -197,23 +197,29 @@ class LazyResource {
         at: DateTime.parse(map['at']));
   }
 
-  LazyResource cloneAt(DateTime newTime, {Resource newRate}) {
+  LazyResource cloneAt(DateTime newTime, {Resource newRate, Resource newMax}) {
     if (newTime.isBefore(at)) {
       throw Exception('new time should be in future');
     }
 
-    final duration = newTime.difference(at).inSeconds;
+    newTime = _truncate(newTime);
+
+    final duration = newTime.difference(at).inMinutes;
     return LazyResource(
         resource: (resource + rate * duration)..limit(max),
-        max: max,
+        max: newMax ?? max,
         rate: newRate ?? rate,
         at: newTime);
   }
 
   Resource resourcesAt(DateTime when) {
-    final duration = when.difference(at).inSeconds;
+    when = _truncate(when);
+    final duration = when.difference(at).inMinutes;
     return (resource + rate * duration)..limit(max);
   }
+  
+  static DateTime _truncate(DateTime date) => DateTime(
+      date.year, date.month, date.day, date.hour, date.minute);
 
   bool hasEnough(ConstResource other) => resource > other;
 
