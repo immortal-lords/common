@@ -6,8 +6,8 @@ export 'resource.dart';
 const numColsInCity = 15;
 const numRowsInCity = 15;
 
-final int ccPosX = (numColsInCity ~/ 2) + 1;
-final int ccPosY = (numRowsInCity ~/ 2) + 1;
+final int ccPosX = numColsInCity ~/ 2;
+final int ccPosY = numRowsInCity ~/ 2;
 
 enum AttackType { none, melee, pierce }
 

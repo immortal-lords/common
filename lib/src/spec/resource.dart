@@ -28,14 +28,27 @@ class ConstResource {
     }
   }
 
-  Resource operator *(int value) =>
-      Resource(wood: wood * value, stone: stone * value, gold: gold * value);
+  Resource operator *(num value) => Resource(
+      wood: (wood * value).toInt(),
+      stone: (stone * value).toInt(),
+      gold: (gold * value).toInt());
 
   bool operator <(other) {
     if (other is int) {
-      return wood < other || stone < other || gold < other;
+      return wood < other && stone < other && gold < other;
     } else if (other is ConstResource) {
-      return wood < other.wood || stone < other.stone || gold < other.gold;
+      return wood < other.wood && stone < other.stone && gold < other.gold;
+    } else if (other == null) {
+      throw ArgumentError.notNull();
+    }
+    throw UnsupportedError('not supported type ${other.runtimeType}');
+  }
+
+  bool operator <=(other) {
+    if (other is int) {
+      return wood <= other && stone <= other && gold <= other;
+    } else if (other is ConstResource) {
+      return wood <= other.wood && stone <= other.stone && gold <= other.gold;
     } else if (other == null) {
       throw ArgumentError.notNull();
     }
@@ -44,9 +57,20 @@ class ConstResource {
 
   bool operator >(other) {
     if (other is int) {
-      return wood > other || stone > other || gold > other;
+      return wood > other && stone > other && gold > other;
     } else if (other is ConstResource) {
-      return wood > other.wood || stone > other.stone || gold > other.gold;
+      return wood > other.wood && stone > other.stone && gold > other.gold;
+    } else if (other == null) {
+      throw ArgumentError.notNull();
+    }
+    throw UnsupportedError('not supported type ${other.runtimeType}');
+  }
+
+  bool operator >=(other) {
+    if (other is int) {
+      return wood >= other && stone >= other && gold >= other;
+    } else if (other is ConstResource) {
+      return wood >= other.wood && stone >= other.stone && gold >= other.gold;
     } else if (other == null) {
       throw ArgumentError.notNull();
     }
@@ -109,8 +133,10 @@ class Resource implements ConstResource {
   }
 
   @override
-  Resource operator *(int value) =>
-      Resource(wood: wood * value, stone: stone * value, gold: gold * value);
+  Resource operator *(num value) => Resource(
+      wood: (wood * value).toInt(),
+      stone: (stone * value).toInt(),
+      gold: (gold * value).toInt());
 
   void addition(value) {
     if (value is int) {
@@ -143,9 +169,21 @@ class Resource implements ConstResource {
   @override
   bool operator <(other) {
     if (other is int) {
-      return wood < other || stone < other || gold < other;
+      return wood < other && stone < other && gold < other;
     } else if (other is ConstResource) {
-      return wood < other.wood || stone < other.stone || gold < other.gold;
+      return wood < other.wood && stone < other.stone && gold < other.gold;
+    } else if (other == null) {
+      throw ArgumentError.notNull();
+    }
+    throw UnsupportedError('not supported type ${other.runtimeType}');
+  }
+
+  @override
+  bool operator <=(other) {
+    if (other is int) {
+      return wood <= other && stone <= other && gold <= other;
+    } else if (other is ConstResource) {
+      return wood <= other.wood && stone <= other.stone && gold <= other.gold;
     } else if (other == null) {
       throw ArgumentError.notNull();
     }
@@ -155,9 +193,21 @@ class Resource implements ConstResource {
   @override
   bool operator >(other) {
     if (other is int) {
-      return wood > other || stone > other || gold > other;
+      return wood > other && stone > other && gold > other;
     } else if (other is ConstResource) {
-      return wood > other.wood || stone > other.stone || gold > other.gold;
+      return wood > other.wood && stone > other.stone && gold > other.gold;
+    } else if (other == null) {
+      throw ArgumentError.notNull();
+    }
+    throw UnsupportedError('not supported type ${other.runtimeType}');
+  }
+
+  @override
+  bool operator >=(other) {
+    if (other is int) {
+      return wood >= other && stone >= other && gold >= other;
+    } else if (other is ConstResource) {
+      return wood >= other.wood && stone >= other.stone && gold >= other.gold;
     } else if (other == null) {
       throw ArgumentError.notNull();
     }
@@ -185,10 +235,16 @@ class LazyResource {
       {@required this.resource,
       @required this.rate,
       @required this.max,
-      @required DateTime at}): at = _truncate(at);
+      @required DateTime at})
+      : at = at;
 
   factory LazyResource.fromMap(Map map) {
     if (map == null) return null;
+
+    DateTime at = DateTime.parse(map['at']);
+    if (!at.isUtc) {
+      at = DateTime.parse(map['at'] + 'Z');
+    }
 
     return LazyResource(
         resource: Resource.fromMap(map['resource']),
@@ -202,9 +258,12 @@ class LazyResource {
       throw Exception('new time should be in future');
     }
 
-    newTime = _truncate(newTime);
+    // newTime = _truncate(newTime);
 
-    final duration = newTime.difference(at).inMinutes;
+    final diff = newTime.difference(at);
+    final diffInSeconds = diff.inSeconds;
+    final duration = diffInSeconds / Duration.secondsPerHour;
+
     return LazyResource(
         resource: (resource + rate * duration)..limit(max),
         max: newMax ?? max,
@@ -213,15 +272,12 @@ class LazyResource {
   }
 
   Resource resourcesAt(DateTime when) {
-    when = _truncate(when);
-    final duration = when.difference(at).inMinutes;
+    // when = _truncate(when);
+    final duration = when.difference(at).inSeconds / Duration.secondsPerHour;
     return (resource + rate * duration)..limit(max);
   }
-  
-  static DateTime _truncate(DateTime date) => DateTime(
-      date.year, date.month, date.day, date.hour, date.minute);
 
-  bool hasEnough(ConstResource other) => resource > other;
+  bool hasEnough(ConstResource other) => resource >= other;
 
   void subtract(ConstResource other) {
     resource.subtract(other);

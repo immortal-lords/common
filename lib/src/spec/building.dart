@@ -82,12 +82,22 @@ class BuildingSpec {
         return goldMine;
       case warehouseId:
         return warehouse;
+      case barrackId:
+        return barrack;
       // TODO
       default:
         throw Exception('unknown building type $type');
     }
     // TODO
   }
+
+  static const buildings = [
+    lumberCamp,
+    quarry,
+    goldMine,
+    warehouse,
+    barrack,
+  ];
 
   static const cityCenter = BuildingSpec(
     type: cityCenterId,
@@ -184,7 +194,9 @@ class BuildingSpec {
   static const lumberCamp = BuildingSpec(
     type: lumberCampId,
     name: 'Lumber camp',
-    description: '',
+    description:
+        '''Wood is a great building material and can be harvested in abundance wherever there are trees. Lumber camps are hives of activity, turning nearby trees into logs for construction of buildings.
+Place lumber camps near as many trees as you can in order to maximize wood production. Lumber camp wood production will be further increased by touching warehouses.''',
     minCCLevel: 1,
     constructionCost: Level20List(
         level1: ConstResource(wood: 50, stone: 0, gold: 0),
@@ -229,6 +241,27 @@ class BuildingSpec {
         level19: Duration(seconds: 155520),
         level20: Duration(seconds: 172800)),
     production1: Level20List(
+        level1: 20,
+        level2: 22,
+        level3: 24,
+        level4: 26,
+        level5: 28,
+        level6: 30,
+        level7: 35,
+        level8: 40,
+        level9: 45,
+        level10: 50,
+        level11: 55,
+        level12: 60,
+        level13: 65,
+        level14: 70,
+        level15: 75,
+        level16: 80,
+        level17: 85,
+        level18: 90,
+        level19: 95,
+        level20: 100),
+    production2: Level20List(
         level1: 5,
         level2: 5,
         level3: 5,
@@ -249,7 +282,6 @@ class BuildingSpec {
         level18: 25,
         level19: 25,
         level20: 25),
-    production2: Level20List(),
   );
 
   static const quarry = BuildingSpec(
@@ -306,20 +338,20 @@ class BuildingSpec {
         level4: 26,
         level5: 28,
         level6: 30,
-        level7: 32,
-        level8: 34,
-        level9: 36,
-        level10: 38,
-        level11: 40,
-        level12: 45,
-        level13: 50,
-        level14: 55,
-        level15: 60,
-        level16: 65,
-        level17: 70,
-        level18: 75,
-        level19: 80,
-        level20: 85),
+        level7: 35,
+        level8: 40,
+        level9: 45,
+        level10: 50,
+        level11: 55,
+        level12: 60,
+        level13: 65,
+        level14: 70,
+        level15: 75,
+        level16: 80,
+        level17: 85,
+        level18: 90,
+        level19: 95,
+        level20: 100),
     production2: Level20List(
         level1: 5,
         level2: 5,
@@ -331,16 +363,16 @@ class BuildingSpec {
         level8: 10,
         level9: 10,
         level10: 10,
-        level11: 15,
-        level12: 15,
-        level13: 15,
-        level14: 15,
-        level15: 15,
-        level16: 20,
-        level17: 20,
-        level18: 20,
-        level19: 20,
-        level20: 20),
+        level11: 20,
+        level12: 20,
+        level13: 20,
+        level14: 20,
+        level15: 20,
+        level16: 25,
+        level17: 25,
+        level18: 25,
+        level19: 25,
+        level20: 25),
   );
 
   static const goldMine = BuildingSpec(
