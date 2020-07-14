@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 export 'building.dart';
 export 'warrior.dart';
 export 'position.dart';
@@ -38,6 +40,55 @@ class WorldMapTileKind {
         throw Exception('unknown kind $name');
     }
   }
+}
+
+class CityEntityKind {
+  final String name;
+
+  const CityEntityKind._({@required this.name});
+
+  static CityEntityKind fromName(String name) {
+    switch (name) {
+      case 'EMPTY':
+        return empty;
+      case 'FOREST':
+        return forest;
+      case 'HILL':
+        return hill;
+      case 'MOUNTAIN':
+        return mountain;
+      case 'LOOKNFEEL':
+        return lookNFeel;
+      case 'DECORATIVE':
+        return decorative;
+      case 'BUILDING':
+        return building;
+      case 'TOWER':
+        return tower;
+      case 'ENEMY':
+        return enemy;
+      default:
+        return null;
+    }
+  }
+
+  static const empty = CityEntityKind._(name: 'EMPTY');
+
+  static const forest = CityEntityKind._(name: 'FOREST');
+
+  static const hill = CityEntityKind._(name: 'HILL');
+
+  static const mountain = CityEntityKind._(name: 'MOUNTAIN');
+
+  static const lookNFeel = CityEntityKind._(name: 'LOOKNFEEL');
+
+  static const decorative = CityEntityKind._(name: 'DECORATIVE');
+
+  static const building = CityEntityKind._(name: 'BUILDING');
+
+  static const tower = CityEntityKind._(name: 'TOWER');
+
+  static const enemy = CityEntityKind._(name: 'ENEMY');
 }
 
 class Level20List<T> {

@@ -113,6 +113,23 @@ class Building implements CityEntity {
   @override
   bool get isBuilding => true;
 
+  /*
+  bool get canRefundConstruction {
+    if (constructionStart == null) {
+      return false;
+    }
+
+    return !constructionStart
+        .isBefore(DateTime.now().toUtc().subtract(Duration(minutes: 1)));
+  }
+   */
+
+  bool get constructionHasFinished {
+    if (constructionEnd == null) return false;
+
+    return constructionEnd.isBefore(DateTime.now().toUtc());
+  }
+
   String get css => spec.name.replaceAll(' ', '-').toLowerCase();
 
   @override
@@ -215,6 +232,36 @@ class City {
   });
 
   int get maxBuildings => level * 5;
+
+  List<CityEntity> getNeighbours(Position pos) {
+    final ret = <CityEntity>[];
+
+    for (int x = pos.x - 1; x <= pos.x + 1; x++) {
+      if (x.isNegative) {
+        continue;
+      }
+
+      for (int y = pos.y - 1; y <= pos.y + 1; y++) {
+        if (y.isNegative) {
+          continue;
+        }
+
+        if (x == pos.x && y == pos.y) {
+          continue;
+        }
+
+        final curPos = Position(x: x, y: y);
+        final entity = children[curPos];
+        if (entity == null) {
+          continue;
+        }
+
+        ret.add(entity);
+      }
+    }
+
+    return ret;
+  }
 
   @override
   String toString() => toJson().toString();

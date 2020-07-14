@@ -102,7 +102,8 @@ class BuildingSpec {
   static const cityCenter = BuildingSpec(
     type: cityCenterId,
     name: 'City center',
-    description: '',
+    description:
+        'The heart of a city houses its mayoral and administrative offices, police and court system. The city center determines the maximum number of buildings in a city and speeds up the construction activities in the city. Additionally, city center offers trade carts to transport resources between cities.',
     minCCLevel: 0,
     constructionCost: Level20List(
         level1: ConstResource(wood: 100, stone: 0, gold: 0),
@@ -195,8 +196,8 @@ class BuildingSpec {
     type: lumberCampId,
     name: 'Lumber camp',
     description:
-        '''Wood is a great building material and can be harvested in abundance wherever there are trees. Lumber camps are hives of activity, turning nearby trees into logs for construction of buildings.
-Place lumber camps near as many trees as you can in order to maximize wood production. Lumber camp wood production will be further increased by touching warehouses.''',
+        '''Wood is a great building material and can be harvested in abundance wherever there are trees. Lumber camps are hives of activity, turning nearby trees into logs for building construction.
+Place lumber camps touching as many trees as you can in order to maximize wood production. Lumber camp wood production will be further increased by touching warehouses.''',
     minCCLevel: 1,
     constructionCost: Level20List(
         level1: ConstResource(wood: 50, stone: 0, gold: 0),
@@ -287,7 +288,9 @@ Place lumber camps near as many trees as you can in order to maximize wood produ
   static const quarry = BuildingSpec(
     type: quarryId,
     name: 'Quarry',
-    description: '',
+    description:
+        '''Fortifications built with stone are strong and keep your cities safe. Quarries drill and excavate stone slabs from neighbouring mountains. Place quarries touching as many mountains as possible to maximize wood production. 
+Quarry's stone production will be further increased by touching warehouses.''',
     minCCLevel: 3,
     constructionCost: Level20List(
         level1: ConstResource(wood: 50, stone: 0, gold: 0),
@@ -378,7 +381,9 @@ Place lumber camps near as many trees as you can in order to maximize wood produ
   static const goldMine = BuildingSpec(
     type: goldMineId,
     name: 'Gold mine',
-    description: '',
+    description:
+        '''Steel wins battles, gold wins wars. This rare ornamental metal has power to raise powerful armies that even Gods will fear. Gold mines extract pea-sized nuggets of nearly pure gold from sand and gravel.
+Place Gold mines touching as many hills as possible to maximize gold production. Gold mine gold production will be further increased by touching warehouses.''',
     minCCLevel: 10,
     constructionCost: Level20List(
         level1: ConstResource(wood: 100, stone: 50, gold: 0),
@@ -470,7 +475,9 @@ Place lumber camps near as many trees as you can in order to maximize wood produ
   static const warehouse = BuildingSpec(
     type: warehouseId,
     name: 'Warehouse',
-    description: '',
+    description:
+        '''Behind every great leader there is an even greater logistician. Storing resources effectively without wasting too much space or having overflow can be a tricky balancing act, but some say it is the heart of strategy.
+Warehouses can be specialized to store more of a resource type by placing that warehouse adjacent to a Lumber camp, Quarry or Gold mine.''',
     minCCLevel: 2,
     constructionCost: Level20List(
         level1: ConstResource(wood: 100, stone: 50, gold: 0),
@@ -651,3 +658,20 @@ Place lumber camps near as many trees as you can in order to maximize wood produ
   static const sanctum = BuildingSpec(
       type: 5, name: 'Sanctum', description: null, constructionCost: null);
 }
+
+/*
+class CityEntityKind {
+  final String name;
+
+  const CityEntityKind(this.name);
+
+  static const empty = CityEntityKind('EMPTY');
+
+  static const forest = CityEntityKind('FOREST');
+
+  static const hill = CityEntityKind('HILL');
+
+  static const mountain = CityEntityKind('MOUNTAIN');
+
+  static const building = CityEntityKind('BUILDING');
+}*/

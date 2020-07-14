@@ -78,6 +78,65 @@ abstract class CityApi implements Api {
   }
 
   @override
+  Future<void> completeUpgrade(int cityId, int buildingId) async {
+    final response = await resty.Post(baseUrl)
+        .path('/api/1.0')
+        .path('/cities/${cityId}/buildings/${buildingId}/upgrade/complete')
+        .header('X-Auth-Token', tokenStore.load())
+        .go();
+    if (response.statusCode == 400) {
+      throw Exception('bad request'); // TODO
+    } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
+      throw Exception('authorization failed');
+    } else if (response.statusCode == 500) {
+      throw Exception('server error'); // TODO
+    } else if (response.statusCode != 204) {
+      throw Exception('unexpected status code');
+    }
+  }
+
+  @override
+  Future<void> cancelUpgrade(int cityId, int buildingId) async {
+    final response = await resty.Post(baseUrl)
+        .path('/api/1.0')
+        .path('/cities/${cityId}/buildings/${buildingId}/upgrade/cancel')
+        .header('X-Auth-Token', tokenStore.load())
+        .go();
+    if (response.statusCode == 400) {
+      throw Exception('bad request'); // TODO
+    } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
+      throw Exception('authorization failed');
+    } else if (response.statusCode == 500) {
+      throw Exception('server error'); // TODO
+    } else if (response.statusCode != 204) {
+      throw Exception('unexpected status code');
+    }
+  }
+
+  @override
+  Future<void> moveBuilding(
+      int cityId, int buildingId, Position newPosition) async {
+    final response = await resty.Post(baseUrl)
+        .path('/api/1.0')
+        .path('/cities/${cityId}/buildings/${buildingId}/move')
+        .header('X-Auth-Token', tokenStore.load())
+        .query('position', newPosition.toString())
+        .go();
+    if (response.statusCode == 400) {
+      throw Exception('bad request'); // TODO
+    } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
+      throw Exception('authorization failed');
+    } else if (response.statusCode == 500) {
+      throw Exception('server error'); // TODO
+    } else if (response.statusCode != 204) {
+      throw Exception('unexpected status code');
+    }
+  }
+
+  @override
   Future<void> demolish(int cityId, int buildingId) async {
     final response = await resty.Post(baseUrl)
         .path('/api/1.0')

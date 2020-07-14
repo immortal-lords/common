@@ -30,6 +30,12 @@ abstract class Api {
 
   Future<void> upgrade(int cityId, int buildingId, int level);
 
+  Future<void> completeUpgrade(int cityId, int buildingId);
+
+  Future<void> cancelUpgrade(int cityId, int buildingId);
+
+  Future<void> moveBuilding(int cityId, int buildingId, Position newPosition);
+
   Future<void> demolish(int cityId, int buildingId);
 }
 
