@@ -384,7 +384,7 @@ Quarry's stone production will be further increased by touching warehouses.''',
     description:
         '''Steel wins battles, gold wins wars. This rare ornamental metal has power to raise powerful armies that even Gods will fear. Gold mines extract pea-sized nuggets of nearly pure gold from sand and gravel.
 Place Gold mines touching as many hills as possible to maximize gold production. Gold mine gold production will be further increased by touching warehouses.''',
-    minCCLevel: 10,
+    minCCLevel: 0,  // TODO 10
     constructionCost: Level20List(
         level1: ConstResource(wood: 100, stone: 50, gold: 0),
         level2: ConstResource(wood: 200, stone: 100, gold: 0),
@@ -566,9 +566,9 @@ Warehouses can be specialized to store more of a resource type by placing that w
   );
 
   static const barrack = BuildingSpec(
-      type: 4,
+      type: barrackId,
       name: 'Barrack',
-      description: '',
+      description: '''Barracks provide housing for armed forces and a place to train and hone their combat skills. Upgrade the barracks to increase troop space and recruit troops faster.''',
       minCCLevel: 2,
       constructionCost: Level20List(
           level1: ConstResource(wood: 100, stone: 0, gold: 0),

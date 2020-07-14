@@ -20,8 +20,8 @@ class WorldMapTileKind {
 
   static const none = WorldMapTileKind._('NONE');
   static const forest = WorldMapTileKind._('FOREST');
-  static const hill = WorldMapTileKind._('HILL');
   static const mountain = WorldMapTileKind._('MOUNTAIN');
+  static const hill = WorldMapTileKind._('HILL');
   static const city = WorldMapTileKind._('CITY');
 
   static WorldMapTileKind fromName(String name) {
@@ -30,10 +30,10 @@ class WorldMapTileKind {
         return none;
       case 'FOREST':
         return forest;
-      case 'HILL':
-        return hill;
       case 'MOUNTAIN':
         return mountain;
+      case 'HILL':
+        return hill;
       case 'CITY':
         return city;
       default:
@@ -53,10 +53,10 @@ class CityEntityKind {
         return empty;
       case 'FOREST':
         return forest;
-      case 'HILL':
-        return hill;
       case 'MOUNTAIN':
         return mountain;
+      case 'HILL':
+        return hill;
       case 'LOOKNFEEL':
         return lookNFeel;
       case 'DECORATIVE':
@@ -76,9 +76,9 @@ class CityEntityKind {
 
   static const forest = CityEntityKind._(name: 'FOREST');
 
-  static const hill = CityEntityKind._(name: 'HILL');
-
   static const mountain = CityEntityKind._(name: 'MOUNTAIN');
+
+  static const hill = CityEntityKind._(name: 'HILL');
 
   static const lookNFeel = CityEntityKind._(name: 'LOOKNFEEL');
 
