@@ -2,6 +2,7 @@ import 'package:common/common.dart';
 import 'package:common/src/api/auth.dart';
 import 'package:common/src/api/city.dart';
 import 'package:common/src/api/empire.dart';
+import 'package:common/src/api/tower.dart';
 import 'package:common/view.dart';
 
 abstract class Api {
@@ -26,20 +27,32 @@ abstract class Api {
 
   Future<City> getMyCityById(int cityId);
 
-  Future<Building> construct(int cityId, Position position, int type);
+  Future<void> constructBuilding(int cityId, Position position, int type);
 
-  Future<void> upgrade(int cityId, int buildingId, int level);
+  Future<void> upgradeBuilding(int cityId, int buildingId, int level);
 
-  Future<void> completeUpgrade(int cityId, int buildingId);
+  Future<void> completeBuildingUpgrade(int cityId, int buildingId);
 
-  Future<void> cancelUpgrade(int cityId, int buildingId);
+  Future<void> cancelBuildingUpgrade(int cityId, int buildingId);
 
   Future<void> moveBuilding(int cityId, int buildingId, Position newPosition);
 
-  Future<void> demolish(int cityId, int buildingId);
+  Future<void> demolishBuilding(int cityId, int buildingId);
+
+  Future<void> constructTower(int cityId, Position position, int type);
+
+  Future<void> upgradeTower(int cityId, int towerId, int level);
+
+  Future<void> completeTowerUpgrade(int cityId, int towerId);
+
+  Future<void> cancelTowerUpgrade(int cityId, int towerId);
+
+  Future<void> moveTower(int cityId, int towerId, Position newPosition);
+
+  Future<void> demolishTower(int cityId, int towerId);
 }
 
-class _ApiImpl with AuthApi, CityApi, PlayerApi implements Api {
+class _ApiImpl with AuthApi, CityApi, PlayerApi, TowerApi implements Api {
   @override
   final String baseUrl;
 

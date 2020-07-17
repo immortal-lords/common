@@ -43,13 +43,15 @@ class CityTerrain implements CityEntity {
 
   CityTerrain({@required this.position, @required this.type});
 
+  CityTerrainSpec get spec => CityTerrainSpec.getByType(type);
+
   @override
   bool get isTerrain => true;
 
   @override
   bool get isBuilding => false;
 
-  String get css => type.toLowerCase();
+  String get css => spec.css;
 
   @override
   bool isEqual(final CityEntity other) {
@@ -79,7 +81,15 @@ class CityTerrain implements CityEntity {
       };
 }
 
-class Building implements CityEntity {
+abstract class Buildable {
+  DateTime get constructionStart;
+
+  DateTime get constructionEnd;
+
+  bool get constructionHasFinished;
+}
+
+class Building implements CityEntity, Buildable {
   final int id;
 
   final int type;
@@ -89,8 +99,10 @@ class Building implements CityEntity {
 
   final int level;
 
+  @override
   final DateTime constructionStart;
 
+  @override
   final DateTime constructionEnd;
 
   @override
@@ -124,13 +136,14 @@ class Building implements CityEntity {
   }
    */
 
+  @override
   bool get constructionHasFinished {
     if (constructionEnd == null) return false;
 
     return constructionEnd.isBefore(DateTime.now().toUtc());
   }
 
-  String get css => spec.name.replaceAll(' ', '-').toLowerCase();
+  String get css => spec.css;
 
   @override
   bool isEqual(final CityEntity other) {
@@ -197,6 +210,162 @@ class Building implements CityEntity {
       };
 }
 
+class BattleFieldEntityKind {
+  final String kind;
+
+  const BattleFieldEntityKind._(this.kind);
+
+  static const tower = BattleFieldEntityKind._('TOWER');
+
+  static const enemy = BattleFieldEntityKind._('ENEMY');
+}
+
+abstract class BattleFieldEntity {
+  int get id;
+
+  Position get position;
+
+  BattleFieldEntityKind get kind;
+
+  Map<String, dynamic> toJson();
+
+  bool isEqual(BattleFieldEntity other);
+
+  static BattleFieldEntity fromMap(Map map) {
+    switch (map['kind']) {
+      case 'TOWER':
+        return Tower.fromMap(map);
+      // TODO enemy
+      default:
+        throw Exception('unknown battle field entity kind');
+    }
+  }
+}
+
+class Tower implements BattleFieldEntity, Buildable {
+  @override
+  final int id;
+
+  @override
+  final Position position;
+
+  final int type;
+
+  @override
+  final DateTime constructionStart;
+
+  @override
+  final DateTime constructionEnd;
+
+  final int level;
+
+  final int hp;
+
+  @override
+  final BattleFieldEntityKind kind = BattleFieldEntityKind.tower;
+
+  final TowerSpec spec;
+
+  Tower(
+      {@required this.id,
+      @required this.position,
+      @required this.type,
+      @required this.constructionStart,
+      @required this.constructionEnd,
+      @required this.level,
+      @required this.hp})
+      : spec = TowerSpec.towerByType(type);
+
+  String get css => spec.css;
+
+  @override
+  bool get constructionHasFinished {
+    if (constructionEnd == null) return false;
+
+    return constructionEnd.isBefore(DateTime.now().toUtc());
+  }
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'position': position.toJson(),
+        'type': type,
+        'level': level,
+        'hp': hp,
+        'kind': kind.kind,
+        'constructionStart': constructionStart?.toUtc()?.toIso8601String(),
+        'constructionEnd': constructionEnd?.toUtc()?.toIso8601String(),
+      };
+
+  @override
+  bool isEqual(BattleFieldEntity other) {
+    if (other is Tower) {
+      if (id != other.id) {
+        return false;
+      }
+
+      if (position != other.position) {
+        return false;
+      }
+
+      if (type != other.type) {
+        return false;
+      }
+
+      if (level != other.level) {
+        return false;
+      }
+
+      if (constructionStart != other.constructionStart) {
+        return false;
+      }
+
+      if (constructionEnd != other.constructionEnd) {
+        return false;
+      }
+
+      if (hp != other.hp) {
+        return false;
+      }
+
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Tower fromMap(Map map) {
+    DateTime constructionStart;
+    if (map['constructionStart'] != null) {
+      constructionStart = DateTime.parse(map['constructionStart']);
+    }
+
+    DateTime constructionEnd;
+    if (map['constructionEnd'] != null) {
+      constructionEnd = DateTime.parse(map['constructionEnd']);
+    }
+
+    return Tower(
+      id: map['id'],
+      position: Position.fromString(map['position']),
+      type: map['type'],
+      level: map['level'],
+      hp: map['hp'],
+      constructionStart: constructionStart,
+      constructionEnd: constructionEnd,
+    );
+  }
+}
+
+/*
+class BattleFieldEnemy implements BattleFieldEntity {
+  final int id;
+
+  final Position position;
+
+  BattleFieldEnemy({this.id, this.position});
+}*/
+
 class City {
   final int id;
 
@@ -205,6 +374,8 @@ class City {
   final Position position;
 
   final Map<Position, CityEntity> children;
+
+  final Map<Position, BattleFieldEntity> battleField;
 
   final LazyResource resources;
 
@@ -222,6 +393,7 @@ class City {
     @required this.id,
     @required this.name,
     @required this.position,
+    @required this.battleField,
     @required this.children,
     @required this.resources,
     @required this.level,
@@ -272,6 +444,8 @@ class City {
         position: Position.fromString(map['position']),
         children: (map['children'] as Map).map((key, value) =>
             MapEntry(Position.fromString(key), CityEntity.fromMap(value))),
+        battleField: (map['battleField'] as Map).map((key, value) => MapEntry(
+            Position.fromString(key), BattleFieldEntity.fromMap(value))),
         resources: LazyResource.fromMap(map['resources']),
         level: map['level'],
         numBuildings: map['numBuildings'],
@@ -285,6 +459,8 @@ class City {
         'name': name,
         'position': position.toJson(),
         'children': children
+            .map((key, value) => MapEntry(key.toJson(), value.toJson())),
+        'battleField': battleField
             .map((key, value) => MapEntry(key.toJson(), value.toJson())),
         'resources': resources.toJson(),
         'level': level,

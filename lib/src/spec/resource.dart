@@ -250,7 +250,7 @@ class LazyResource {
         resource: Resource.fromMap(map['resource']),
         rate: Resource.fromMap(map['rate']),
         max: Resource.fromMap(map['max']),
-        at: DateTime.parse(map['at']));
+        at: at);
   }
 
   LazyResource cloneAt(DateTime newTime, {Resource newRate, Resource newMax}) {

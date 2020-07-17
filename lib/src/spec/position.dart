@@ -1,5 +1,3 @@
-import 'package:common/common.dart';
-
 class Position {
   int x;
 

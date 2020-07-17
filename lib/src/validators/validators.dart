@@ -30,10 +30,20 @@ List buildingIdValidator(int value) {
 }
 
 List buildingLevelValidator(int value) {
+  return validateValue(value, [isNotNull(), isPositive(), isLessThan(20)]);
+}
+
+List towerTypeValidator(int value) {
   return validateValue(value, [
     isNotNull(),
     isPositive(),
-    // TODO check max value
+    (value) {
+      if (value == null) return null;
+      if (TowerSpec.towerByType(value) == null) {
+        return ['tower type does not exist'];
+      }
+      return null;
+    }
   ]);
 }
 
@@ -69,7 +79,7 @@ int parseCityId(String stringValue, ObjectErrors errs,
   return cityId;
 }
 
-int parseBuildingType(String stringValue, ObjectErrors errs,
+BuildingSpec parseBuildingType(String stringValue, ObjectErrors errs,
     {String key = 'query.buildingType'}) {
   if (stringValue == null) {
     errs[key] = ['is mandatory'];
@@ -86,7 +96,7 @@ int parseBuildingType(String stringValue, ObjectErrors errs,
     return null;
   }
 
-  return buildingType;
+  return BuildingSpec.byType(buildingType);
 }
 
 int parseBuildingId(String stringValue, ObjectErrors errs,
@@ -127,4 +137,24 @@ int parseBuildingLevel(String stringValue, ObjectErrors errs,
   }
 
   return buildingLevel;
+}
+
+TowerSpec parseTowerType(String stringValue, ObjectErrors errs,
+    {String key = 'query.towerType'}) {
+  if (stringValue == null) {
+    errs[key] = ['is mandatory'];
+    return null;
+  }
+  int towerType = int.tryParse(stringValue);
+  if (towerType == null) {
+    errs[key] = ['is not a valid integer'];
+    return null;
+  }
+  final vErrs = towerTypeValidator(towerType);
+  if (vErrs != null) {
+    errs[key] = vErrs;
+    return null;
+  }
+
+  return TowerSpec.towerByType(towerType);
 }

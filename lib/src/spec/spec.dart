@@ -4,9 +4,13 @@ export 'building.dart';
 export 'warrior.dart';
 export 'position.dart';
 export 'resource.dart';
+export 'tower.dart';
 
 const numColsInCity = 15;
-const numRowsInCity = 15;
+const numRowsInCity = 12;
+
+const numColsInBattleField = 15;
+const numRowsInBattleField = 7;
 
 final int ccPosX = numColsInCity ~/ 2;
 final int ccPosY = numRowsInCity ~/ 2;
@@ -40,55 +44,6 @@ class WorldMapTileKind {
         throw Exception('unknown kind $name');
     }
   }
-}
-
-class CityEntityKind {
-  final String name;
-
-  const CityEntityKind._({@required this.name});
-
-  static CityEntityKind fromName(String name) {
-    switch (name) {
-      case 'EMPTY':
-        return empty;
-      case 'FOREST':
-        return forest;
-      case 'MOUNTAIN':
-        return mountain;
-      case 'HILL':
-        return hill;
-      case 'LOOKNFEEL':
-        return lookNFeel;
-      case 'DECORATIVE':
-        return decorative;
-      case 'BUILDING':
-        return building;
-      case 'TOWER':
-        return tower;
-      case 'ENEMY':
-        return enemy;
-      default:
-        return null;
-    }
-  }
-
-  static const empty = CityEntityKind._(name: 'EMPTY');
-
-  static const forest = CityEntityKind._(name: 'FOREST');
-
-  static const mountain = CityEntityKind._(name: 'MOUNTAIN');
-
-  static const hill = CityEntityKind._(name: 'HILL');
-
-  static const lookNFeel = CityEntityKind._(name: 'LOOKNFEEL');
-
-  static const decorative = CityEntityKind._(name: 'DECORATIVE');
-
-  static const building = CityEntityKind._(name: 'BUILDING');
-
-  static const tower = CityEntityKind._(name: 'TOWER');
-
-  static const enemy = CityEntityKind._(name: 'ENEMY');
 }
 
 class Level20List<T> {

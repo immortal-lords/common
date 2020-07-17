@@ -6,39 +6,15 @@ import 'package:common/view.dart';
 
 import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 
-abstract class CityApi implements Api {
+abstract class TowerApi implements Api {
   @override
-  Future<City> getMyCityById(int cityId) async {
-    final response = await resty.Get(baseUrl)
-        .path('/api/1.0')
-        .path('/cities/${cityId}')
-        .header('X-Auth-Token', tokenStore.load())
-        .go();
-    if (response.statusCode == 400) {
-      throw Exception('bad request'); // TODO
-    } else if (response.statusCode == 403) {
-      onSessionExpire?.call();
-      throw Exception('authorization failed');
-    } else if (response.statusCode == 500) {
-      throw Exception('server error'); // TODO
-    } else if (response.statusCode != 200) {
-      throw Exception('unexpected status code');
-    }
-
-    final map = jsonDecode(response.body);
-    final ret = City.fromMap(map);
-
-    return ret;
-  }
-
-  @override
-  Future<void> constructBuilding(int cityId, Position position, int type) async {
+  Future<void> constructTower(int cityId, Position position, int type) async {
     final response = await resty.Post(baseUrl)
         .path('/api/1.0')
-        .path('/cities/${cityId}/buildings/construct')
+        .path('/cities/${cityId}/towers/construct')
         .header('X-Auth-Token', tokenStore.load())
         .query('position', position.toJson())
-        .query('buildingType', type.toString())
+        .query('towerType', type.toString())
         .go();
     if (response.statusCode == 400) {
       throw Exception('bad request'); // TODO
@@ -53,12 +29,12 @@ abstract class CityApi implements Api {
   }
 
   @override
-  Future<void> upgradeBuilding(int cityId, int buildingId, int level) async {
+  Future<void> upgradeTower(int cityId, int towerId, int level) async {
     final response = await resty.Post(baseUrl)
         .path('/api/1.0')
-        .path('/cities/${cityId}/buildings/${buildingId}/upgrade')
+        .path('/cities/${cityId}/towers/${towerId}/upgrade')
         .header('X-Auth-Token', tokenStore.load())
-        .query('buildingLevel', level.toString())
+        .query('towerLevel', level.toString())
         .go();
     if (response.statusCode == 400) {
       throw Exception('bad request'); // TODO
@@ -73,29 +49,10 @@ abstract class CityApi implements Api {
   }
 
   @override
-  Future<void> completeBuildingUpgrade(int cityId, int buildingId) async {
+  Future<void> completeTowerUpgrade(int cityId, int towerId) async {
     final response = await resty.Post(baseUrl)
         .path('/api/1.0')
-        .path('/cities/${cityId}/buildings/${buildingId}/upgrade/complete')
-        .header('X-Auth-Token', tokenStore.load())
-        .go();
-    if (response.statusCode == 400) {
-      throw Exception('bad request'); // TODO
-    } else if (response.statusCode == 403) {
-      onSessionExpire?.call();
-      throw Exception('authorization failed');
-    } else if (response.statusCode == 500) {
-      throw Exception('server error'); // TODO
-    } else if (response.statusCode != 204) {
-      throw Exception('unexpected status code');
-    }
-  }
-
-  @override
-  Future<void> cancelBuildingUpgrade(int cityId, int buildingId) async {
-    final response = await resty.Post(baseUrl)
-        .path('/api/1.0')
-        .path('/cities/${cityId}/buildings/${buildingId}/upgrade/cancel')
+        .path('/cities/${cityId}/towers/${towerId}/upgrade/complete')
         .header('X-Auth-Token', tokenStore.load())
         .go();
     if (response.statusCode == 400) {
@@ -111,11 +68,29 @@ abstract class CityApi implements Api {
   }
 
   @override
-  Future<void> moveBuilding(
-      int cityId, int buildingId, Position newPosition) async {
+  Future<void> cancelTowerUpgrade(int cityId, int towerId) async {
     final response = await resty.Post(baseUrl)
         .path('/api/1.0')
-        .path('/cities/${cityId}/buildings/${buildingId}/move')
+        .path('/cities/${cityId}/towers/${towerId}/upgrade/cancel')
+        .header('X-Auth-Token', tokenStore.load())
+        .go();
+    if (response.statusCode == 400) {
+      throw Exception('bad request'); // TODO
+    } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
+      throw Exception('authorization failed');
+    } else if (response.statusCode == 500) {
+      throw Exception('server error'); // TODO
+    } else if (response.statusCode != 204) {
+      throw Exception('unexpected status code');
+    }
+  }
+
+  @override
+  Future<void> moveTower(int cityId, int towerId, Position newPosition) async {
+    final response = await resty.Post(baseUrl)
+        .path('/api/1.0')
+        .path('/cities/${cityId}/buildings/${towerId}/move')
         .header('X-Auth-Token', tokenStore.load())
         .query('position', newPosition.toString())
         .go();
@@ -132,10 +107,10 @@ abstract class CityApi implements Api {
   }
 
   @override
-  Future<void> demolishBuilding(int cityId, int buildingId) async {
+  Future<void> demolishTower(int cityId, int towerId) async {
     final response = await resty.Post(baseUrl)
         .path('/api/1.0')
-        .path('/cities/${cityId}/buildings/${buildingId}/demolish')
+        .path('/cities/${cityId}/towers/${towerId}/demolish')
         .header('X-Auth-Token', tokenStore.load())
         .go();
     if (response.statusCode == 400) {
