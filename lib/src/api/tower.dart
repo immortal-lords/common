@@ -90,7 +90,7 @@ abstract class TowerApi implements Api {
   Future<void> moveTower(int cityId, int towerId, Position newPosition) async {
     final response = await resty.Post(baseUrl)
         .path('/api/1.0')
-        .path('/cities/${cityId}/buildings/${towerId}/move')
+        .path('/cities/${cityId}/towers/${towerId}/move')
         .header('X-Auth-Token', tokenStore.load())
         .query('position', newPosition.toString())
         .go();

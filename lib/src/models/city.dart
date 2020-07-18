@@ -5,17 +5,44 @@ import 'package:common/common.dart';
 abstract class CityEntity {
   Position get position;
 
-  String get kind;
-
   bool isEqual(CityEntity other);
 
   dynamic toJson();
+
+  bool get isIndustrialEntity;
+
+  bool get isBattleFieldEntity;
+
+  static CityEntity fromMap(Map map) {
+    final kind = map['kind'];
+    if (kind == null) {
+      throw Exception('kind cannot be null');
+    }
+
+    switch (kind) {
+      case 'TERRAIN':
+        return CityTerrain.fromMap(map);
+      case 'BUILDING':
+        return Building.fromMap(map);
+      case 'TOWER':
+        return Tower.fromMap(map);
+      default:
+        throw Exception('unknown city entity kind: $kind');
+    }
+  }
+}
+
+abstract class IndustrialEntity implements CityEntity {
+  @override
+  Position get position;
+
+  String get kind;
 
   bool get isTerrain;
 
   bool get isBuilding;
 
-  static CityEntity fromMap(Map map) {
+  static IndustrialEntity fromMap(Map map) {
     final kind = map['kind'];
     if (kind == null) {
       throw Exception('kind cannot be null');
@@ -32,7 +59,7 @@ abstract class CityEntity {
   }
 }
 
-class CityTerrain implements CityEntity {
+class CityTerrain implements IndustrialEntity {
   @override
   final Position position;
 
@@ -46,10 +73,16 @@ class CityTerrain implements CityEntity {
   CityTerrainSpec get spec => CityTerrainSpec.getByType(type);
 
   @override
-  bool get isTerrain => true;
+  final bool isIndustrialEntity = true;
 
   @override
-  bool get isBuilding => false;
+  final bool isBattleFieldEntity = false;
+
+  @override
+  final bool isTerrain = true;
+
+  @override
+  final bool isBuilding = false;
 
   String get css => spec.css;
 
@@ -81,7 +114,9 @@ class CityTerrain implements CityEntity {
       };
 }
 
-abstract class Buildable {
+abstract class Buildable implements CityEntity {
+  int get id;
+
   DateTime get constructionStart;
 
   DateTime get constructionEnd;
@@ -89,7 +124,8 @@ abstract class Buildable {
   bool get constructionHasFinished;
 }
 
-class Building implements CityEntity, Buildable {
+class Building implements IndustrialEntity, Buildable {
+  @override
   final int id;
 
   final int type;
@@ -118,6 +154,12 @@ class Building implements CityEntity, Buildable {
       @required this.constructionStart,
       @required this.constructionEnd})
       : spec = BuildingSpec.byType(type);
+
+  @override
+  final bool isIndustrialEntity = true;
+
+  @override
+  final bool isBattleFieldEntity = false;
 
   @override
   bool get isTerrain => false;
@@ -220,16 +262,11 @@ class BattleFieldEntityKind {
   static const enemy = BattleFieldEntityKind._('ENEMY');
 }
 
-abstract class BattleFieldEntity {
-  int get id;
-
+abstract class BattleFieldEntity implements CityEntity {
+  @override
   Position get position;
 
   BattleFieldEntityKind get kind;
-
-  Map<String, dynamic> toJson();
-
-  bool isEqual(BattleFieldEntity other);
 
   static BattleFieldEntity fromMap(Map map) {
     switch (map['kind']) {
@@ -276,6 +313,12 @@ class Tower implements BattleFieldEntity, Buildable {
       @required this.hp})
       : spec = TowerSpec.towerByType(type);
 
+  @override
+  final bool isIndustrialEntity = false;
+
+  @override
+  final bool isBattleFieldEntity = true;
+
   String get css => spec.css;
 
   @override
@@ -298,7 +341,7 @@ class Tower implements BattleFieldEntity, Buildable {
       };
 
   @override
-  bool isEqual(BattleFieldEntity other) {
+  bool isEqual(CityEntity other) {
     if (other is Tower) {
       if (id != other.id) {
         return false;
@@ -375,8 +418,6 @@ class City {
 
   final Map<Position, CityEntity> children;
 
-  final Map<Position, BattleFieldEntity> battleField;
-
   final LazyResource resources;
 
   final int level;
@@ -393,7 +434,6 @@ class City {
     @required this.id,
     @required this.name,
     @required this.position,
-    @required this.battleField,
     @required this.children,
     @required this.resources,
     @required this.level,
@@ -444,8 +484,6 @@ class City {
         position: Position.fromString(map['position']),
         children: (map['children'] as Map).map((key, value) =>
             MapEntry(Position.fromString(key), CityEntity.fromMap(value))),
-        battleField: (map['battleField'] as Map).map((key, value) => MapEntry(
-            Position.fromString(key), BattleFieldEntity.fromMap(value))),
         resources: LazyResource.fromMap(map['resources']),
         level: map['level'],
         numBuildings: map['numBuildings'],
@@ -459,8 +497,6 @@ class City {
         'name': name,
         'position': position.toJson(),
         'children': children
-            .map((key, value) => MapEntry(key.toJson(), value.toJson())),
-        'battleField': battleField
             .map((key, value) => MapEntry(key.toJson(), value.toJson())),
         'resources': resources.toJson(),
         'level': level,

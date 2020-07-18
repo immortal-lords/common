@@ -34,6 +34,8 @@ class TowerSpec {
 
   final Level20List<int> pierceArmor;
 
+  final int minCCLevel;
+
   const TowerSpec({
     @required this.type,
     @required this.name,
@@ -45,6 +47,7 @@ class TowerSpec {
     @required this.hp,
     @required this.armor,
     @required this.pierceArmor,
+    @required this.minCCLevel,
   });
 
   String get css => name.replaceAll(' ', '-').toLowerCase();
@@ -56,6 +59,11 @@ class TowerSpec {
   static const berserkerId = 10000;
 
   static const archerId = 10001;
+
+  static const List<TowerSpec> towers = [
+    wall,
+    archerTower,
+  ];
 
   static TowerSpec anyByType(int type) {
     switch (type) {
@@ -95,50 +103,58 @@ class TowerSpec {
   }
 
   static const wall = TowerSpec(
-      type: wallId,
-      name: 'Wall',
-      description: '''Walls''',
-      constructionCost: Level20List.same(ConstResource(stone: 100)),
-      constructionDuration: Level20List.same(Duration(minutes: 1)),
-      attackType: AttackType.physical,
-      damage: Level20List.same(5),
-      hp: Level20List.same(100),
-      armor: Level20List.same(10),
-      pierceArmor: Level20List.same(10));
+    type: wallId,
+    name: 'Wall',
+    description: '''Walls''',
+    constructionCost: Level20List.same(ConstResource(stone: 100)),
+    constructionDuration: Level20List.same(Duration(minutes: 1)),
+    attackType: AttackType.physical,
+    damage: Level20List.same(5),
+    hp: Level20List.same(100),
+    armor: Level20List.same(10),
+    pierceArmor: Level20List.same(10),
+    minCCLevel: 1,
+  );
 
   static const archerTower = TowerSpec(
-      type: archerTowerId,
-      name: 'Archer tower',
-      description: '''Archer tower''',
-      constructionCost: Level20List.same(ConstResource(stone: 100)),
-      constructionDuration: Level20List.same(Duration(minutes: 1)),
-      attackType: AttackType.pierce,
-      damage: Level20List.same(10),
-      hp: Level20List.same(100),
-      armor: Level20List.same(10),
-      pierceArmor: Level20List.same(10));
+    type: archerTowerId,
+    name: 'Archer tower',
+    description: '''Archer tower''',
+    constructionCost: Level20List.same(ConstResource(stone: 100)),
+    constructionDuration: Level20List.same(Duration(minutes: 1)),
+    attackType: AttackType.pierce,
+    damage: Level20List.same(10),
+    hp: Level20List.same(100),
+    armor: Level20List.same(10),
+    pierceArmor: Level20List.same(10),
+    minCCLevel: 1,
+  );
 
   static const berserker = TowerSpec(
-      type: archerTowerId,
-      name: 'Archer tower',
-      description: '''Archer tower''',
-      constructionCost: Level20List.same(ConstResource(stone: 100)),
-      constructionDuration: Level20List.same(Duration(minutes: 1)),
-      attackType: AttackType.pierce,
-      damage: Level20List.same(10),
-      hp: Level20List.same(100),
-      armor: Level20List.same(10),
-      pierceArmor: Level20List.same(10));
+    type: archerTowerId,
+    name: 'Archer tower',
+    description: '''Archer tower''',
+    constructionCost: Level20List.same(ConstResource(stone: 100)),
+    constructionDuration: Level20List.same(Duration(minutes: 1)),
+    attackType: AttackType.pierce,
+    damage: Level20List.same(10),
+    hp: Level20List.same(100),
+    armor: Level20List.same(10),
+    pierceArmor: Level20List.same(10),
+    minCCLevel: 1,
+  );
 
   static const archer = TowerSpec(
-      type: archerTowerId,
-      name: 'Archer tower',
-      description: '''Archer tower''',
-      constructionCost: Level20List.same(ConstResource(stone: 100)),
-      constructionDuration: Level20List.same(Duration(minutes: 1)),
-      attackType: AttackType.pierce,
-      damage: Level20List.same(10),
-      hp: Level20List.same(100),
-      armor: Level20List.same(10),
-      pierceArmor: Level20List.same(10));
+    type: archerTowerId,
+    name: 'Archer tower',
+    description: '''Archer tower''',
+    constructionCost: Level20List.same(ConstResource(stone: 100)),
+    constructionDuration: Level20List.same(Duration(minutes: 1)),
+    attackType: AttackType.pierce,
+    damage: Level20List.same(10),
+    hp: Level20List.same(100),
+    armor: Level20List.same(10),
+    pierceArmor: Level20List.same(10),
+    minCCLevel: 1,
+  );
 }
