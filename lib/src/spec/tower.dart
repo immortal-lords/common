@@ -1,18 +1,6 @@
 import 'package:common/common.dart';
 import 'package:meta/meta.dart';
 
-class AttackType {
-  final String name;
-
-  const AttackType._(this.name);
-
-  static const physical = AttackType._('PHYSICAL');
-
-  static const pierce = AttackType._('PIERCE');
-
-  // TODO static const magical = AttackType._('MAGICAL');
-}
-
 class TowerSpec {
   final int type;
 
@@ -56,47 +44,17 @@ class TowerSpec {
 
   static const archerTowerId = 1;
 
-  static const berserkerId = 10000;
-
-  static const archerId = 10001;
-
   static const List<TowerSpec> towers = [
     wall,
     archerTower,
   ];
 
-  static TowerSpec anyByType(int type) {
+  static TowerSpec byType(int type) {
     switch (type) {
       case wallId:
         return wall;
       case archerTowerId:
         return archerTower;
-      case berserkerId:
-        return berserker;
-      case archerId:
-        return archer;
-      default:
-        throw Exception('unknown tower type $type');
-    }
-  }
-
-  static TowerSpec towerByType(int type) {
-    switch (type) {
-      case wallId:
-        return wall;
-      case archerTowerId:
-        return archerTower;
-      default:
-        throw Exception('unknown tower type $type');
-    }
-  }
-
-  static TowerSpec unitByType(int type) {
-    switch (type) {
-      case berserkerId:
-        return berserker;
-      case archerId:
-        return archer;
       default:
         throw Exception('unknown tower type $type');
     }
@@ -105,7 +63,7 @@ class TowerSpec {
   static const wall = TowerSpec(
     type: wallId,
     name: 'Wall',
-    description: '''Walls''',
+    description: '''This strong and heavily armored structure tank enemy attacks and provide cover for towers.''',
     constructionCost: Level20List.same(ConstResource(stone: 100)),
     constructionDuration: Level20List.same(Duration(minutes: 1)),
     attackType: AttackType.physical,
@@ -119,35 +77,7 @@ class TowerSpec {
   static const archerTower = TowerSpec(
     type: archerTowerId,
     name: 'Archer tower',
-    description: '''Archer tower''',
-    constructionCost: Level20List.same(ConstResource(stone: 100)),
-    constructionDuration: Level20List.same(Duration(minutes: 1)),
-    attackType: AttackType.pierce,
-    damage: Level20List.same(10),
-    hp: Level20List.same(100),
-    armor: Level20List.same(10),
-    pierceArmor: Level20List.same(10),
-    minCCLevel: 1,
-  );
-
-  static const berserker = TowerSpec(
-    type: archerTowerId,
-    name: 'Archer tower',
-    description: '''Archer tower''',
-    constructionCost: Level20List.same(ConstResource(stone: 100)),
-    constructionDuration: Level20List.same(Duration(minutes: 1)),
-    attackType: AttackType.pierce,
-    damage: Level20List.same(10),
-    hp: Level20List.same(100),
-    armor: Level20List.same(10),
-    pierceArmor: Level20List.same(10),
-    minCCLevel: 1,
-  );
-
-  static const archer = TowerSpec(
-    type: archerTowerId,
-    name: 'Archer tower',
-    description: '''Archer tower''',
+    description: '''A tall structure built of wood and stone that provides shelter, stability and a good angle to aim arrows upon attackers that threaten the city.''',
     constructionCost: Level20List.same(ConstResource(stone: 100)),
     constructionDuration: Level20List.same(Duration(minutes: 1)),
     attackType: AttackType.pierce,

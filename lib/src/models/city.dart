@@ -1,3 +1,4 @@
+import 'package:common/api.dart';
 import 'package:meta/meta.dart';
 
 import 'package:common/common.dart';
@@ -311,7 +312,7 @@ class Tower implements BattleFieldEntity, Buildable {
       @required this.constructionEnd,
       @required this.level,
       @required this.hp})
-      : spec = TowerSpec.towerByType(type);
+      : spec = TowerSpec.byType(type);
 
   @override
   final bool isIndustrialEntity = false;
@@ -320,6 +321,14 @@ class Tower implements BattleFieldEntity, Buildable {
   final bool isBattleFieldEntity = true;
 
   String get css => spec.css;
+
+  int get fullHp => spec.hp[level];
+
+  int get armor => spec.armor[level];
+
+  int get pierceArmor => spec.pierceArmor[level];
+
+  int get damage => spec.damage[level];
 
   @override
   bool get constructionHasFinished {
@@ -412,6 +421,8 @@ class BattleFieldEnemy implements BattleFieldEntity {
 class City {
   final int id;
 
+  final int version;
+
   final String name;
 
   final Position position;
@@ -430,8 +441,13 @@ class City {
 
   final int recruitmentSpeed;
 
+  final List<Recruiting> recruiting;
+
+  final List<Fighter> fighters;
+
   City({
     @required this.id,
+    @required this.version,
     @required this.name,
     @required this.position,
     @required this.children,
@@ -441,6 +457,8 @@ class City {
     @required this.numBuildings,
     @required this.troopSpace,
     @required this.recruitmentSpeed,
+    @required this.recruiting,
+    @required this.fighters,
   });
 
   int get maxBuildings => level * 5;
@@ -480,6 +498,7 @@ class City {
 
   static City fromMap(Map map) => City(
         id: map['id'],
+        version: map['version'],
         name: map['name'],
         position: Position.fromString(map['position']),
         children: (map['children'] as Map).map((key, value) =>
@@ -490,10 +509,17 @@ class City {
         constructionSpeed: map['constructionSpeed'],
         troopSpace: map['troopSpace'],
         recruitmentSpeed: map['recruitmentSpeed'],
+        recruiting: (map['recruiting'] as List)
+            .cast<Map>()
+            .map(Recruiting.fromMap)
+            .toList(),
+        fighters:
+            (map['fighters'] as List).cast<Map>().map(Fighter.fromMap).toList(),
       );
 
   Map<String, dynamic> toJson() => {
         'id': id,
+        'version': version,
         'name': name,
         'position': position.toJson(),
         'children': children
@@ -504,5 +530,7 @@ class City {
         'constructionSpeed': constructionSpeed,
         'troopSpace': troopSpace,
         'recruitmentSpeed': recruitmentSpeed,
+        'recruiting': recruiting.map((r) => r.toJson()).toList(),
+        'fighters': fighters.map((r) => r.toJson()).toList(),
       };
 }

@@ -29,6 +29,13 @@ List buildingIdValidator(int value) {
   ]);
 }
 
+List recruitmentIdValidator(int value) {
+  return validateValue(value, [
+    isNotNull(),
+    isPositive(),
+  ]);
+}
+
 List buildingLevelValidator(int value) {
   return validateValue(value, [isNotNull(), isPositive(), isLessThan(20)]);
 }
@@ -39,8 +46,22 @@ List towerTypeValidator(int value) {
     isPositive(),
     (value) {
       if (value == null) return null;
-      if (TowerSpec.towerByType(value) == null) {
-        return ['tower type does not exist'];
+      if (TowerSpec.byType(value) == null) {
+        return ['unknown tower type'];
+      }
+      return null;
+    }
+  ]);
+}
+
+List warriorTypeValidator(int value) {
+  return validateValue(value, [
+    isNotNull(),
+    isPositive(),
+    (value) {
+      if (value == null) return null;
+      if (WarriorSpec.byType(value, throws: false) == null) {
+        return ['unknown warrior type'];
       }
       return null;
     }
@@ -77,6 +98,26 @@ int parseCityId(String stringValue, ObjectErrors errs,
   }
 
   return cityId;
+}
+
+int parseCityVersion(String stringValue, ObjectErrors errs,
+    {String key = 'query.version'}) {
+  if (stringValue == null) {
+    return null;
+  }
+  int version = int.tryParse(stringValue);
+  if (version == null) {
+    errs[key] = ['is not a valid integer'];
+    return null;
+  }
+
+  final vErrs = validateValue(version, [isPositive()]);
+  if (vErrs != null) {
+    errs[key] = vErrs;
+    return null;
+  }
+
+  return version;
 }
 
 BuildingSpec parseBuildingType(String stringValue, ObjectErrors errs,
@@ -156,5 +197,69 @@ TowerSpec parseTowerType(String stringValue, ObjectErrors errs,
     return null;
   }
 
-  return TowerSpec.towerByType(towerType);
+  return TowerSpec.byType(towerType);
+}
+
+int parseRecruitmentId(String stringValue, ObjectErrors errs,
+    {String key = 'url.recruitmentId'}) {
+  if (stringValue == null) {
+    errs[key] = ['is mandatory'];
+    return null;
+  }
+  int recruitmentId = int.tryParse(stringValue);
+  if (recruitmentId == null) {
+    errs[key] = ['is not a valid integer'];
+    return null;
+  }
+  final vErrs = recruitmentIdValidator(recruitmentId);
+  if (vErrs != null) {
+    errs[key] = vErrs;
+    return null;
+  }
+
+  return recruitmentId;
+}
+
+WarriorSpec parseWarriorType(String stringValue, ObjectErrors errs,
+    {String key = 'query.warriorType'}) {
+  if (stringValue == null) {
+    errs[key] = ['is mandatory'];
+    return null;
+  }
+  int towerType = int.tryParse(stringValue);
+  if (towerType == null) {
+    errs[key] = ['is not a valid integer'];
+    return null;
+  }
+  final vErrs = warriorTypeValidator(towerType);
+  if (vErrs != null) {
+    errs[key] = vErrs;
+    return null;
+  }
+
+  return WarriorSpec.byType(towerType);
+}
+
+int parseWarriorCount(String stringValue, ObjectErrors errs,
+    {String key = 'query.count'}) {
+  if (stringValue == null) {
+    errs[key] = ['is mandatory'];
+    return null;
+  }
+  int count = int.tryParse(stringValue);
+  if (count == null) {
+    errs[key] = ['is not a valid integer'];
+    return null;
+  }
+
+  final vErrs = validateValue(count, [
+    isNotNull(),
+    isPositive(),
+  ]);
+  if(vErrs != null) {
+    errs[key] = vErrs;
+    return null;
+  }
+
+  return count;
 }

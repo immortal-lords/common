@@ -5,10 +5,11 @@ import '../spec/spec.dart';
 
 import 'package:collection/collection.dart';
 
-export 'auth.dart';
 export '../spec/resource.dart';
+export 'auth.dart';
 export 'city.dart';
 export 'player.dart';
+export 'warrior.dart';
 
 class Alliance {
   final int id;

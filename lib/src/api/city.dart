@@ -8,11 +8,12 @@ import 'package:jaguar_resty/jaguar_resty.dart' as resty;
 
 abstract class CityApi implements Api {
   @override
-  Future<City> getMyCityById(int cityId) async {
+  Future<City> getMyCityById(int cityId, {City city}) async {
     final response = await resty.Get(baseUrl)
         .path('/api/1.0')
         .path('/cities/${cityId}')
         .header('X-Auth-Token', tokenStore.load())
+        .query('version', city?.version)
         .go();
     if (response.statusCode == 400) {
       throw Exception('bad request'); // TODO
@@ -21,6 +22,11 @@ abstract class CityApi implements Api {
       throw Exception('authorization failed');
     } else if (response.statusCode == 500) {
       throw Exception('server error'); // TODO
+    } else if (response.statusCode == 204) {
+      if (city == null) {
+        throw Exception('wrong response from server.');
+      }
+      return city;
     } else if (response.statusCode != 200) {
       throw Exception('unexpected status code');
     }
@@ -32,7 +38,8 @@ abstract class CityApi implements Api {
   }
 
   @override
-  Future<void> constructBuilding(int cityId, Position position, int type) async {
+  Future<void> constructBuilding(
+      int cityId, Position position, int type) async {
     final response = await resty.Post(baseUrl)
         .path('/api/1.0')
         .path('/cities/${cityId}/buildings/construct')
@@ -137,6 +144,85 @@ abstract class CityApi implements Api {
         .path('/api/1.0')
         .path('/cities/${cityId}/buildings/${buildingId}/demolish')
         .header('X-Auth-Token', tokenStore.load())
+        .go();
+    if (response.statusCode == 400) {
+      throw Exception('bad request'); // TODO
+    } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
+      throw Exception('authorization failed');
+    } else if (response.statusCode == 500) {
+      throw Exception('server error'); // TODO
+    } else if (response.statusCode != 204) {
+      throw Exception('unexpected status code');
+    }
+  }
+
+  @override
+  Future<void> recruit(int cityId, int type, int count) async {
+    final response = await resty.Post(baseUrl)
+        .path('/api/1.0')
+        .path('/cities/${cityId}/recruitments')
+        .header('X-Auth-Token', tokenStore.load())
+        .query('warriorType', type)
+        .query('count', count)
+        .go();
+    if (response.statusCode == 400) {
+      throw Exception('bad request'); // TODO
+    } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
+      throw Exception('authorization failed');
+    } else if (response.statusCode == 500) {
+      throw Exception('server error'); // TODO
+    } else if (response.statusCode != 204) {
+      throw Exception('unexpected status code');
+    }
+  }
+
+  @override
+  Future<void> completeRecruitment(int cityId, int recruitmentId) async {
+    final response = await resty.Post(baseUrl)
+        .path('/api/1.0')
+        .path('/cities/${cityId}/recruitments/${recruitmentId}/complete')
+        .header('X-Auth-Token', tokenStore.load())
+        .go();
+    if (response.statusCode == 400) {
+      throw Exception('bad request'); // TODO
+    } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
+      throw Exception('authorization failed');
+    } else if (response.statusCode == 500) {
+      throw Exception('server error'); // TODO
+    } else if (response.statusCode != 204) {
+      throw Exception('unexpected status code');
+    }
+  }
+
+  @override
+  Future<void> cancelRecruitment(int cityId, int recruitmentId) async {
+    final response = await resty.Post(baseUrl)
+        .path('/api/1.0')
+        .path('/cities/${cityId}/recruitments/${recruitmentId}/cancel')
+        .header('X-Auth-Token', tokenStore.load())
+        .go();
+    if (response.statusCode == 400) {
+      throw Exception('bad request'); // TODO
+    } else if (response.statusCode == 403) {
+      onSessionExpire?.call();
+      throw Exception('authorization failed');
+    } else if (response.statusCode == 500) {
+      throw Exception('server error'); // TODO
+    } else if (response.statusCode != 204) {
+      throw Exception('unexpected status code');
+    }
+  }
+
+  @override
+  Future<void> dismissFighters(int cityId, int type, int count) async {
+    final response = await resty.Post(baseUrl)
+        .path('/api/1.0')
+        .path('/cities/${cityId}/fighters/${type}/dismiss')
+        .header('X-Auth-Token', tokenStore.load())
+        .query('count', count)
         .go();
     if (response.statusCode == 400) {
       throw Exception('bad request'); // TODO

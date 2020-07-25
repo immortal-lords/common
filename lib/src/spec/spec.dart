@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 export 'building.dart';
 export 'warrior.dart';
 export 'position.dart';
@@ -15,7 +13,17 @@ const numRowsInBattleField = 7;
 final int ccPosX = numColsInCity ~/ 2;
 final int ccPosY = numRowsInCity ~/ 2;
 
-enum AttackType { none, melee, pierce }
+class AttackType {
+  final String name;
+
+  const AttackType._(this.name);
+
+  static const physical = AttackType._('PHYSICAL');
+
+  static const pierce = AttackType._('PIERCE');
+
+  // TODO static const magical = AttackType._('MAGICAL');
+}
 
 class WorldMapTileKind {
   final String name;

@@ -10,8 +10,6 @@ class WarriorSpec {
 
   final AttackType attackType;
 
-  final bool isMythical;
-
   final Level20List<int> armor;
 
   final Level20List<int> pierceArmor;
@@ -22,456 +20,79 @@ class WarriorSpec {
 
   final Level20List<ConstResource> recruitmentCost;
 
-  final Level20List<int> recruitmentDuration;
+  final Level20List<Duration> recruitmentDuration;
 
-  const WarriorSpec(
-      {@required this.type,
-        @required this.name,
-        @required this.description,
-        @required this.attackType,
-        @required this.isMythical,
-        @required this.armor,
-        @required this.pierceArmor,
-        @required this.hp,
-        @required this.damage,
-        @required this.recruitmentCost,
-        @required this.recruitmentDuration});
+  final int minBarrackLevel;
 
-  static const maxLevels = 10;
+  final int troopSpace;
 
-  static WarriorSpec byType(int index) {
-    switch (index) {
-      case 0:
-      // TODO
+  const WarriorSpec({
+    @required this.type,
+    @required this.name,
+    @required this.description,
+    @required this.attackType,
+    @required this.armor,
+    @required this.pierceArmor,
+    @required this.hp,
+    @required this.damage,
+    @required this.recruitmentCost,
+    @required this.recruitmentDuration,
+    @required this.minBarrackLevel,
+    @required this.troopSpace,
+  });
+
+  String get css => name.replaceAll(' ', '-').toLowerCase();
+
+  static const berserkerId = 0;
+
+  static const archerId = 1;
+
+  static const specs = [
+    berserker,
+    archer,
+  ];
+
+  static WarriorSpec byType(int type, {bool throws = true}) {
+    switch (type) {
+      case berserkerId:
+        return berserker;
+      case archerId:
+        return archer;
       default:
-      // TODO
+        if(!throws) {
+          return null;
+        }
+        throw Exception('unknown warrior type $type');
     }
   }
 
-  static const militia = WarriorSpec(
-      type: 0,
-      name: 'Militia',
-      description: '',
-      isMythical: false,
-      armor: Level20List(
-          level1: 0,
-          level2: 1,
-          level3: 2,
-          level4: 3,
-          level5: 4,
-          level6: 5,
-          level7: 6,
-          level8: 7,
-          level9: 8,
-          level10: 9),
-      pierceArmor: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      hp: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      damage: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      recruitmentCost: Level20List(
-          level1: ConstResource(wood: 10),
-          level2: ConstResource(wood: 10),
-          level3: ConstResource(wood: 10),
-          level4: ConstResource(wood: 10),
-          level5: ConstResource(wood: 10),
-          level6: ConstResource(wood: 10),
-          level7: ConstResource(wood: 10),
-          level8: ConstResource(wood: 10),
-          level9: ConstResource(wood: 10),
-          level10: ConstResource(wood: 10)));
+  static const berserker = WarriorSpec(
+    type: berserkerId,
+    name: 'Berserker',
+    description: '''Berserker''',
+    recruitmentCost: Level20List.same(ConstResource(wood: 10)),
+    recruitmentDuration: Level20List.same(Duration(minutes: 1)),
+    attackType: AttackType.pierce,
+    damage: Level20List.same(10),
+    hp: Level20List.same(100),
+    armor: Level20List.same(10),
+    pierceArmor: Level20List.same(10),
+    minBarrackLevel: 1,
+    troopSpace: 1,
+  );
 
   static const archer = WarriorSpec(
-      type: 1,
-      name: 'Archer',
-      description: '',
-      isMythical: false,
-      armor: Level20List(
-          level1: 0,
-          level2: 1,
-          level3: 2,
-          level4: 3,
-          level5: 4,
-          level6: 5,
-          level7: 6,
-          level8: 7,
-          level9: 8,
-          level10: 9),
-      pierceArmor: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      hp: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      damage: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      recruitmentCost: Level20List(
-          level1: ConstResource(wood: 10),
-          level2: ConstResource(wood: 10),
-          level3: ConstResource(wood: 10),
-          level4: ConstResource(wood: 10),
-          level5: ConstResource(wood: 10),
-          level6: ConstResource(wood: 10),
-          level7: ConstResource(wood: 10),
-          level8: ConstResource(wood: 10),
-          level9: ConstResource(wood: 10),
-          level10: ConstResource(wood: 10)));
-
-  static const paladin = WarriorSpec(
-      type: 2,
-      name: 'Paladin',
-      description: '',
-      isMythical: false,
-      armor: Level20List(
-          level1: 0,
-          level2: 1,
-          level3: 2,
-          level4: 3,
-          level5: 4,
-          level6: 5,
-          level7: 6,
-          level8: 7,
-          level9: 8,
-          level10: 9),
-      pierceArmor: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      hp: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      damage: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      recruitmentCost: Level20List(
-          level1: ConstResource(wood: 10),
-          level2: ConstResource(wood: 10),
-          level3: ConstResource(wood: 10),
-          level4: ConstResource(wood: 10),
-          level5: ConstResource(wood: 10),
-          level6: ConstResource(wood: 10),
-          level7: ConstResource(wood: 10),
-          level8: ConstResource(wood: 10),
-          level9: ConstResource(wood: 10),
-          level10: ConstResource(wood: 10)));
-
-  static const halbadier = WarriorSpec(
-      type: 4,
-      name: 'Halbadier',
-      description: '',
-      isMythical: false,
-      armor: Level20List(
-          level1: 0,
-          level2: 1,
-          level3: 2,
-          level4: 3,
-          level5: 4,
-          level6: 5,
-          level7: 6,
-          level8: 7,
-          level9: 8,
-          level10: 9),
-      pierceArmor: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      hp: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      damage: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      recruitmentCost: Level20List(
-          level1: ConstResource(wood: 10),
-          level2: ConstResource(wood: 10),
-          level3: ConstResource(wood: 10),
-          level4: ConstResource(wood: 10),
-          level5: ConstResource(wood: 10),
-          level6: ConstResource(wood: 10),
-          level7: ConstResource(wood: 10),
-          level8: ConstResource(wood: 10),
-          level9: ConstResource(wood: 10),
-          level10: ConstResource(wood: 10)));
-
-  static const mage = WarriorSpec(
-      type: 4,
-      name: 'Halbadier',
-      description: '',
-      isMythical: false,
-      armor: Level20List(
-          level1: 0,
-          level2: 1,
-          level3: 2,
-          level4: 3,
-          level5: 4,
-          level6: 5,
-          level7: 6,
-          level8: 7,
-          level9: 8,
-          level10: 9),
-      pierceArmor: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      hp: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      damage: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      recruitmentCost: Level20List(
-          level1: ConstResource(wood: 10),
-          level2: ConstResource(wood: 10),
-          level3: ConstResource(wood: 10),
-          level4: ConstResource(wood: 10),
-          level5: ConstResource(wood: 10),
-          level6: ConstResource(wood: 10),
-          level7: ConstResource(wood: 10),
-          level8: ConstResource(wood: 10),
-          level9: ConstResource(wood: 10),
-          level10: ConstResource(wood: 10)));
-
-  static const warlock = WarriorSpec(
-      type: 4,
-      name: 'Halbadier',
-      description: '',
-      isMythical: false,
-      armor: Level20List(
-          level1: 0,
-          level2: 1,
-          level3: 2,
-          level4: 3,
-          level5: 4,
-          level6: 5,
-          level7: 6,
-          level8: 7,
-          level9: 8,
-          level10: 9),
-      pierceArmor: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      hp: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      damage: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      recruitmentCost: Level20List(
-          level1: ConstResource(wood: 10),
-          level2: ConstResource(wood: 10),
-          level3: ConstResource(wood: 10),
-          level4: ConstResource(wood: 10),
-          level5: ConstResource(wood: 10),
-          level6: ConstResource(wood: 10),
-          level7: ConstResource(wood: 10),
-          level8: ConstResource(wood: 10),
-          level9: ConstResource(wood: 10),
-          level10: ConstResource(wood: 10)));
-
-  static const titan = WarriorSpec(
-      type: 4,
-      name: 'Halbadier',
-      description: '',
-      isMythical: false,
-      armor: Level20List(
-          level1: 0,
-          level2: 1,
-          level3: 2,
-          level4: 3,
-          level5: 4,
-          level6: 5,
-          level7: 6,
-          level8: 7,
-          level9: 8,
-          level10: 9),
-      pierceArmor: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      hp: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      damage: Level20List(
-          level1: 0,
-          level2: 0,
-          level3: 0,
-          level4: 0,
-          level5: 0,
-          level6: 0,
-          level7: 0,
-          level8: 0,
-          level9: 0,
-          level10: 0),
-      recruitmentCost: Level20List(
-          level1: ConstResource(wood: 10),
-          level2: ConstResource(wood: 10),
-          level3: ConstResource(wood: 10),
-          level4: ConstResource(wood: 10),
-          level5: ConstResource(wood: 10),
-          level6: ConstResource(wood: 10),
-          level7: ConstResource(wood: 10),
-          level8: ConstResource(wood: 10),
-          level9: ConstResource(wood: 10),
-          level10: ConstResource(wood: 10)));
+    type: archerId,
+    name: 'Archer',
+    description: '''Archer''',
+    recruitmentCost: Level20List.same(ConstResource(wood: 10)),
+    recruitmentDuration: Level20List.same(Duration(minutes: 1)),
+    attackType: AttackType.pierce,
+    damage: Level20List.same(10),
+    hp: Level20List.same(100),
+    armor: Level20List.same(10),
+    pierceArmor: Level20List.same(10),
+    minBarrackLevel: 1,
+    troopSpace: 1,
+  );
 }

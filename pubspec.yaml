@@ -10,6 +10,7 @@ dependencies:
   meta:
   jaguar_validate: ^2.0.6
   jaguar_resty: ^2.10.15
+  duration: ^2.0.14
 
 dev_dependencies:
   pedantic: ^1.9.0

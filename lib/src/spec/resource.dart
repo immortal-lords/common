@@ -241,10 +241,7 @@ class LazyResource {
   factory LazyResource.fromMap(Map map) {
     if (map == null) return null;
 
-    DateTime at = DateTime.parse(map['at']);
-    if (!at.isUtc) {
-      at = DateTime.parse(map['at'] + 'Z');
-    }
+    DateTime at = parseUTCTime(map['at']);
 
     return LazyResource(
         resource: Resource.fromMap(map['resource']),
@@ -289,4 +286,13 @@ class LazyResource {
         'max': max.toJson(),
         'at': at.toIso8601String(),
       };
+}
+
+DateTime parseUTCTime(String input) {
+  DateTime at = DateTime.parse(input);
+  if (!at.isUtc) {
+    at = DateTime.parse(input + 'Z');
+  }
+
+  return at;
 }

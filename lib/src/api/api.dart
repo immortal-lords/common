@@ -25,7 +25,7 @@ abstract class Api {
 
   Future<Empire> firstCity();
 
-  Future<City> getMyCityById(int cityId);
+  Future<City> getMyCityById(int cityId, {City city});
 
   Future<void> constructBuilding(int cityId, Position position, int type);
 
@@ -50,12 +50,21 @@ abstract class Api {
   Future<void> moveTower(int cityId, int towerId, Position newPosition);
 
   Future<void> demolishTower(int cityId, int towerId);
+
+  Future<void> recruit(int cityId, int type, int count);
+
+  Future<void> completeRecruitment(int cityId, int recruitmentId);
+
+  Future<void> cancelRecruitment(int cityId, int recruitmentId);
+
+  Future<void> dismissFighters(int cityId, int type, int count);
 }
 
 class _ApiImpl with AuthApi, CityApi, PlayerApi, TowerApi implements Api {
   @override
   final String baseUrl;
 
+  @override
   final TokenStore tokenStore;
 
   @override
