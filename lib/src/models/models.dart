@@ -10,6 +10,7 @@ export 'auth.dart';
 export 'city.dart';
 export 'player.dart';
 export 'warrior.dart';
+export 'world.dart';
 
 class Alliance {
   final int id;

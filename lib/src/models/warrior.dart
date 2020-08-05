@@ -40,9 +40,9 @@ class Recruiting {
     }
 
     final total = finish.difference(start).inSeconds;
-    final trained = finish.difference(now).inSeconds;
+    final trained = now.difference(start).inSeconds;
 
-    return trained / total;
+    return (trained * 100) / total;
   }
 
   WarriorSpec get spec => WarriorSpec.byType(type);

@@ -35,6 +35,7 @@ class WorldMapTileKind {
   static const mountain = WorldMapTileKind._('MOUNTAIN');
   static const hill = WorldMapTileKind._('HILL');
   static const city = WorldMapTileKind._('CITY');
+  static const dungeon = WorldMapTileKind._('DUNGEON');
 
   static WorldMapTileKind fromName(String name) {
     switch (name) {

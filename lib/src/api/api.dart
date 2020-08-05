@@ -58,6 +58,8 @@ abstract class Api {
   Future<void> cancelRecruitment(int cityId, int recruitmentId);
 
   Future<void> dismissFighters(int cityId, int type, int count);
+
+  Future<World> getWorld();
 }
 
 class _ApiImpl with AuthApi, CityApi, PlayerApi, TowerApi implements Api {
